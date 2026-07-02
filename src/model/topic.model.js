@@ -16,11 +16,10 @@ const getAllTopics = async (collection_id) => {
   return result;
 };
 
-const getTopicById = async (collection_id, topic_id) => {
-  const result = await pool.query(
-    "select * from topics where collection_id=$1 and topic_id=$2",
-    [collection_id, topic_id],
-  );
+const getTopicById = async (topic_id) => {
+  const result = await pool.query("select * from topics where topic_id=$1", [
+    topic_id,
+  ]);
   return result;
 };
 

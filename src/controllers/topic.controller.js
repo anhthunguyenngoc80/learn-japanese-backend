@@ -27,9 +27,9 @@ const getAllTopics = async (req, res) => {
 };
 
 const getTopicById = async (req, res) => {
-  const { collectionId, topicId } = req.params;
+  const { topicId } = req.params;
   try {
-    const result = await topicModel.getTopicById(collectionId, topicId);
+    const result = await topicModel.getTopicById(topicId);
     res
       .status(201)
       .json({ message: "Get Topic successfully", data: result.rows });

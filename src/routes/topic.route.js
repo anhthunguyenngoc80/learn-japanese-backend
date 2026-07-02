@@ -5,6 +5,6 @@ const topicController = require("../controllers/topic.controller");
 
 router.post("/:collectionId", topicController.createTopic);
 router.get("/:collectionId", topicController.getAllTopics);
-router.get("/:collectionId/:topicId", topicController.getTopicById);
+router.get(":topicId", topicController.getTopicById);
 
 module.exports = router;
