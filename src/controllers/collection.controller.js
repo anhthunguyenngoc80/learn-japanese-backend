@@ -26,7 +26,7 @@ const getCollectionById = async (req, res) => {
   const { user_id } = req.body;
   const { collectionId } = req.params;
   try {
-    const result = collectionModel.getCollectionById(user_id, collection_id);
+    const result = collectionModel.getCollectionById(user_id, collectionId);
     res.status(201).json({ message: "Get collection successfully" });
   } catch (error) {
     console.log("Query failed", error);
