@@ -1,9 +1,11 @@
 const topicModel = require("../model/topic.model");
 
 const createTopic = async (req, res) => {
-  const { user_id, name } = req.body;
+  const { collectionId } = req.params;
+  const { name } = req.body;
+
   try {
-    const result = await topicModel.createTopic(user_id, name);
+    const result = await topicModel.createTopic(collectionId, name);
     res.status(201).json({ message: "Create successfull", data: result.rows });
   } catch (error) {
     console.log("Create topic failed", error);
@@ -12,9 +14,9 @@ const createTopic = async (req, res) => {
 };
 
 const getAllTopics = async (req, res) => {
-  const { user_id } = req.body;
+  const { collectionId } = req.params;
   try {
-    const result = await topicModel.getAllTopics(user_id);
+    const result = await topicModel.getAllTopics(collectionId);
     res
       .status(201)
       .json({ message: "Get Topics successfully", data: result.rows });
@@ -25,10 +27,9 @@ const getAllTopics = async (req, res) => {
 };
 
 const getTopicById = async (req, res) => {
-  const { user_id } = req.body;
-  const { topicId } = req.params;
+  const { collectionId, topicId } = req.params;
   try {
-    const result = await topicModel.getTopicById(user_id, topicId);
+    const result = await topicModel.getTopicById(collectionId, topicId);
     res
       .status(201)
       .json({ message: "Get Topic successfully", data: result.rows });

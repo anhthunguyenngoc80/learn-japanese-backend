@@ -3,8 +3,8 @@ const router = express.Router();
 
 const topicController = require("../controllers/topic.controller");
 
-router.post("/", topicController.createTopic);
-router.get("/", topicController.getAllTopics);
-router.get("/:topicId", topicController.getTopicById);
+router.post("/:collectionId", topicController.createTopic);
+router.get("/:collectionId", topicController.getAllTopics);
+router.get("/:collectionId/:topicId", topicController.getTopicById);
 
 module.exports = router;
