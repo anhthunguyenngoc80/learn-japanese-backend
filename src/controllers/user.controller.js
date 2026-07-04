@@ -19,12 +19,11 @@ const login = async (req, res) => {
     const result = await authService.login(email, password);
     res.status(200).json({
       message: "User logged in successfully",
-      token: result.token,
       data: result,
     });
   } catch (error) {
     console.error("Error logging in user:", error);
-    res.status(401).json({ error: "Invalid email or password" });
+    res.status(401).json({ error: res.message });
   }
 };
 
