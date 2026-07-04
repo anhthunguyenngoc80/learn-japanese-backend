@@ -5,7 +5,7 @@ const createCollection = async (user_id, name) => {
     "insert into collections (user_id, name) values ($1, $2) returning user_id, name",
     [user_id, name],
   );
-  return result;
+  return result.rows;
 };
 
 const getAllCollections = async (user_id) => {
@@ -13,7 +13,7 @@ const getAllCollections = async (user_id) => {
     "select * from collections where user_id=$1",
     [user_id],
   );
-  return result;
+  return result.rows;
 };
 
 const getCollectionById = async (user_id, collection_id) => {
@@ -21,7 +21,7 @@ const getCollectionById = async (user_id, collection_id) => {
     "select * from collections where user_id=$1 and collection_id=$2",
     [user_id, collection_id],
   );
-  return result;
+  return result.rows;
 };
 
 module.exports = {
