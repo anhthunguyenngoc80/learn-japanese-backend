@@ -14,9 +14,7 @@ const register = async (username, email, password) => {
 };
 
 const login = async (email, password) => {
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const result = await userModel.login(email, hashedPassword);
+  const result = await userModel.login(email);
 
   if (!result) {
     throw new Error("Email hoặc mật khẩu không đúng");

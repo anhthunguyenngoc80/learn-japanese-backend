@@ -16,10 +16,10 @@ const findByEmail = async (email) => {
   return result.rows;
 };
 
-const login = async (email, password) => {
+const login = async (email) => {
   const result = await pool.query(
-    "select user_id, username, email, password from users where email = $1 and password = $2",
-    [email, password],
+    "select user_id, username, email, password from users where email = $1",
+    [email],
   );
   return result.rows[0];
 };
