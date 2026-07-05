@@ -24,8 +24,18 @@ const login = async (email) => {
   return result.rows[0];
 };
 
+const getUserById = async (user_id) => {
+  const result = await pool.query(
+    "SELECT user_id, username, email FROM users WHERE user_id = $1",
+    [user_id],
+  );
+
+  return result.rows[0];
+};
+
 module.exports = {
   register,
   findByEmail,
   login,
+  getUserById,
 };
