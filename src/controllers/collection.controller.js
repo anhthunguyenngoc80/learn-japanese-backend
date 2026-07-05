@@ -1,7 +1,8 @@
 const collectionModel = require("../model/collection.model");
 
 const createCollection = async (req, res) => {
-  const { user_id, name } = req.body;
+  const { name } = req.body;
+  const user_id = req.user.user_id;
   try {
     const result = await collectionModel.createCollection(user_id, name);
     res.status(201).json({ message: "Create successfull", data: result });
@@ -12,7 +13,7 @@ const createCollection = async (req, res) => {
 };
 
 const getAllCollections = async (req, res) => {
-  const { user_id } = req.body;
+  const user_id = req.user.user_id;
   try {
     const result = await collectionModel.getAllCollections(user_id);
     res
@@ -25,7 +26,7 @@ const getAllCollections = async (req, res) => {
 };
 
 const getCollectionById = async (req, res) => {
-  const { user_id } = req.body;
+  const user_id = req.user.user_id;
   const { collectionId } = req.params;
   try {
     const result = await collectionModel.getCollectionById(
