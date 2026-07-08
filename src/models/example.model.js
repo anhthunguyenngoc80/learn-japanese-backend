@@ -8,4 +8,16 @@ const createExample = async (word_id, content, meaning, executor = pool) => {
   return result.rows;
 };
 
-module.exports = { createExample };
+const deleteByCollectionId = async (collection_id, executor = pool) => {
+  const result = await executor.query(
+    `delete from examples where word_id in (
+      select w.word_id from words w
+      join topics t on w.topic_id = t.topic_id
+      where t.collection_id = $1
+    )`,
+    [collection_id],
+  );
+  return result;
+};
+
+module.exports = { createExample, deleteByCollectionId };

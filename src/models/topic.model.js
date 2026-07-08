@@ -23,8 +23,17 @@ const getTopicById = async (topic_id, executor = pool) => {
   return result.rows;
 };
 
+const deleteByCollectionId = async (collection_id, executor = pool) => {
+  const result = await executor.query(
+    "delete from topics where collection_id = $1",
+    [collection_id],
+  );
+  return result;
+};
+
 module.exports = {
   createTopic,
   getAllTopics,
   getTopicById,
+  deleteByCollectionId,
 };

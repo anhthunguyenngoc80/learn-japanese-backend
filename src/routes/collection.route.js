@@ -11,5 +11,10 @@ router.get(
   verifyToken,
   collectionController.getCollectionById,
 );
+router.delete(
+  "/:collectionId",
+  verifyToken,
+  collectionController.deleteCollection,
+);
 
 module.exports = router;

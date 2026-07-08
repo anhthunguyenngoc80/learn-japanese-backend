@@ -24,8 +24,17 @@ const getCollectionById = async (user_id, collection_id, executor = pool) => {
   return result.rows;
 };
 
+const deleteCollection = async (user_id, collection_id, executor = pool) => {
+  const result = await executor.query(
+    "delete from collections where user_id=$1 and collection_id=$2 returning collection_id",
+    [user_id, collection_id],
+  );
+  return result.rows[0];
+};
+
 module.exports = {
   createCollection,
   getAllCollections,
   getCollectionById,
+  deleteCollection,
 };

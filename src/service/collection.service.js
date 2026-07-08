@@ -34,4 +34,24 @@ const createCollection = async (user_id, name, topics) => {
   }
 };
 
-module.exports = { createCollection };
+const deleteCollection = async (user_id, collection_id) => {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    await models.Example.deleteByCollectionId(collection_id, client);
+    await models.Word.deleteByCollectionId(collection_id, client);
+    await models.Topic.deleteByCollectionId(collection_id, client);
+    const result = await models.Collection.deleteCollection(user_id, collection_id, client);
+
+    await client.query("COMMIT");
+    return result;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+};
+
+module.exports = { createCollection, deleteCollection };
