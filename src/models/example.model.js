@@ -20,4 +20,12 @@ const deleteByCollectionId = async (collection_id, executor = pool) => {
   return result;
 };
 
-module.exports = { createExample, deleteByCollectionId };
+const getExamplesByWordId = async (word_id, executor = pool) => {
+  const result = await executor.query(
+    "select * from examples where word_id=$1",
+    [word_id],
+  );
+  return result.rows;
+};
+
+module.exports = { createExample, deleteByCollectionId, getExamplesByWordId };

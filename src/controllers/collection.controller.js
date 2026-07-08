@@ -1,5 +1,4 @@
 const collectionService = require("../service/collection.service");
-const collectionModel = require("../models/collection.model");
 
 const createCollection = async (req, res) => {
   const { name, topics } = req.body;
@@ -16,7 +15,7 @@ const createCollection = async (req, res) => {
 const getAllCollections = async (req, res) => {
   const user_id = req.user.user_id;
   try {
-    const result = await collectionModel.getAllCollections(user_id);
+    const result = await collectionService.getAllCollections(user_id);
     res
       .status(201)
       .json({ message: "Get collections successfully", data: result });
@@ -30,12 +29,15 @@ const getCollectionById = async (req, res) => {
   const user_id = req.user.user_id;
   const { collectionId } = req.params;
   try {
-    const result = await collectionModel.getCollectionById(
+    const result = await collectionService.getCollectionDetail(
       user_id,
       collectionId,
     );
+    if (!result) {
+      return res.status(404).json({ message: "Collection not found" });
+    }
     res
-      .status(201)
+      .status(200)
       .json({ message: "Get collection successfully", data: result });
   } catch (error) {
     console.log("Query failed", error);
