@@ -1,4 +1,4 @@
-const topicModel = require("../model/topic.model");
+const topicModel = require("../models/topic.model");
 
 const createWord = async (req, res) => {
   const { topicId } = req.params;

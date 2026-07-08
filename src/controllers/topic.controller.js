@@ -1,4 +1,4 @@
-const topicModel = require("../model/topic.model");
+const topicModel = require("../models/topic.model");
 
 const createTopic = async (req, res) => {
   const { collectionId } = req.params;

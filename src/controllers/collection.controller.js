@@ -1,10 +1,11 @@
-const collectionModel = require("../model/collection.model");
+const collectionService = require("../service/collection.service");
+const collectionModel = require("../models/collection.model");
 
 const createCollection = async (req, res) => {
-  const { name } = req.body;
+  const { name, topics } = req.body;
   const user_id = req.user.user_id;
   try {
-    const result = await collectionModel.createCollection(user_id, name);
+    const result = await collectionService.createCollection(user_id, name, topics || []);
     res.status(201).json({ message: "Create successfull", data: result });
   } catch (error) {
     console.log("Create collection failed", error);

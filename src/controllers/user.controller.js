@@ -1,5 +1,5 @@
 const authService = require("../service/auth.service");
-const userModel = require("../model/user.model");
+const userModel = require("../models/user.model");
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
