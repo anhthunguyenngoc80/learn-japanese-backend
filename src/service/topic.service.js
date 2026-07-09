@@ -1,12 +1,14 @@
 const models = require("../models");
 
-const getTopicById = async (topic_id) => {
+const getTopicById = async (topic_id, limit) => {
   const topic = await models.Topic.getTopicById(topic_id);
   if (!topic) {
     return null;
   }
 
-  const words = await models.Word.getAllWords(topic.topic_id);
+  const words = limit
+    ? await models.Word.getWordsByLimit(topic.topic_id, limit)
+    : await models.Word.getAllWords(topic.topic_id);
 
   const wordsWithExamples = await Promise.all(
     words.map(async (word) => {

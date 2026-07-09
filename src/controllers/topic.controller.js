@@ -27,8 +27,9 @@ const getAllTopics = async (req, res) => {
 
 const getTopicById = async (req, res) => {
   const { topicId } = req.params;
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : null;
   try {
-    const result = await topicService.getTopicById(topicId);
+    const result = await topicService.getTopicById(topicId, limit);
     if (!result) {
       return res.status(404).json({ message: "Topic not found" });
     }
