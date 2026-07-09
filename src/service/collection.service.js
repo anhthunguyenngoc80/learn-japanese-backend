@@ -6,18 +6,35 @@ const createCollection = async (user_id, name, topics) => {
   try {
     await client.query("BEGIN");
 
-    const collection = await models.Collection.createCollection(user_id, name, client);
+    const collection = await models.Collection.createCollection(
+      user_id,
+      name,
+      client,
+    );
 
     for (const topic of topics) {
-      const topicRow = await models.Topic.createTopic(collection.collection_id, topic.name, client);
+      const topicRow = await models.Topic.createTopic(
+        collection.collection_id,
+        topic.name,
+        client,
+      );
 
       if (topic.words?.length) {
         for (const word of topic.words) {
-          const wordRow = await models.Word.createWord(topicRow.topic_id, word, client);
+          const wordRow = await models.Word.createWord(
+            topicRow.topic_id,
+            word,
+            client,
+          );
 
           if (word.examples?.length) {
             for (const example of word.examples) {
-              await models.Example.createExample(wordRow.word_id, example.content, example.meaning, client);
+              await models.Example.createExample(
+                wordRow.word_id,
+                example.content,
+                example.meaning,
+                client,
+              );
             }
           }
         }
@@ -42,7 +59,11 @@ const deleteCollection = async (user_id, collection_id) => {
     await models.Example.deleteByCollectionId(collection_id, client);
     await models.Word.deleteByCollectionId(collection_id, client);
     await models.Topic.deleteByCollectionId(collection_id, client);
-    const result = await models.Collection.deleteCollection(user_id, collection_id, client);
+    const result = await models.Collection.deleteCollection(
+      user_id,
+      collection_id,
+      client,
+    );
 
     await client.query("COMMIT");
     return result;
@@ -54,8 +75,11 @@ const deleteCollection = async (user_id, collection_id) => {
   }
 };
 
-const getCollectionDetail = async (user_id, collection_id) => {
-  const collections = await models.Collection.getCollectionById(user_id, collection_id);
+const getCollectionDetail = async (user_id, collection_id, limit) => {
+  const collections = await models.Collection.getCollectionById(
+    user_id,
+    collection_id,
+  );
   if (!collections || collections.length === 0) {
     return null;
   }
@@ -65,11 +89,13 @@ const getCollectionDetail = async (user_id, collection_id) => {
 
   const topicsWithWords = await Promise.all(
     topics.map(async (topic) => {
-      const words = await models.Word.getAllWords(topic.topic_id);
+      const words = await models.Word.getWordsByLimit(topic.topic_id, limit);
 
       const wordsWithExamples = await Promise.all(
         words.map(async (word) => {
-          const examples = await models.Example.getExamplesByWordId(word.word_id);
+          const examples = await models.Example.getExamplesByWordId(
+            word.word_id,
+          );
           return {
             word_id: word.word_id,
             topic_id: word.topic_id,
@@ -109,4 +135,9 @@ const getAllCollections = async (user_id) => {
   return await models.Collection.getAllCollections(user_id);
 };
 
-module.exports = { createCollection, deleteCollection, getCollectionDetail, getAllCollections };
+module.exports = {
+  createCollection,
+  deleteCollection,
+  getCollectionDetail,
+  getAllCollections,
+};

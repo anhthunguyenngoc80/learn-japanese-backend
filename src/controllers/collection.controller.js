@@ -4,7 +4,11 @@ const createCollection = async (req, res) => {
   const { name, topics } = req.body;
   const user_id = req.user.user_id;
   try {
-    const result = await collectionService.createCollection(user_id, name, topics || []);
+    const result = await collectionService.createCollection(
+      user_id,
+      name,
+      topics || [],
+    );
     res.status(201).json({ message: "Create successfull", data: result });
   } catch (error) {
     console.log("Create collection failed", error);
@@ -28,10 +32,12 @@ const getAllCollections = async (req, res) => {
 const getCollectionById = async (req, res) => {
   const user_id = req.user.user_id;
   const { collectionId } = req.params;
+  const { limit } = req.query;
   try {
     const result = await collectionService.getCollectionDetail(
       user_id,
       collectionId,
+      limit,
     );
     if (!result) {
       return res.status(404).json({ message: "Collection not found" });
@@ -49,7 +55,10 @@ const deleteCollection = async (req, res) => {
   const user_id = req.user.user_id;
   const { collectionId } = req.params;
   try {
-    const result = await collectionService.deleteCollection(user_id, collectionId);
+    const result = await collectionService.deleteCollection(
+      user_id,
+      collectionId,
+    );
     if (!result) {
       return res.status(404).json({ message: "Collection not found" });
     }
