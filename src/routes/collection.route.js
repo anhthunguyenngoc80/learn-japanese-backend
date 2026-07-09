@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const collectionController = require("../controllers/collection.controller");
+const topicController = require("../controllers/topic.controller");
 const { verifyToken } = require("../middlewave/auth.middleware");
 
 router.post("/", verifyToken, collectionController.createCollection);
@@ -16,5 +17,8 @@ router.delete(
   verifyToken,
   collectionController.deleteCollection,
 );
+
+router.post("/:collectionId/topics", verifyToken, topicController.createTopic);
+router.get("/:collectionId/topics", verifyToken, topicController.getAllTopics);
 
 module.exports = router;
