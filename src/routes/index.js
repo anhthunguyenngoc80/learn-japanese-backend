@@ -8,7 +8,7 @@ const wordRoutes = require("./word.route");
 
 router.use("/", userRoutes);
 router.use("/collections", collectionRoutes);
-router.use("/topics", topicRoutes);
+router.use("/", topicRoutes);
 router.use("/words", wordRoutes);
 
 module.exports = router;
