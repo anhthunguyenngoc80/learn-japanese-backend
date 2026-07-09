@@ -10,7 +10,14 @@ const createCollection = async (user_id, name, executor = pool) => {
 
 const getAllCollections = async (user_id, executor = pool) => {
   const result = await executor.query(
-    "select * from collections where user_id=$1",
+    `select c.*, coalesce(t.topic_count, 0) as topic_count
+     from collections c
+     left join (
+       select collection_id, count(*) as topic_count
+       from topics
+       group by collection_id
+     ) t on c.collection_id = t.collection_id
+     where c.user_id=$1`,
     [user_id],
   );
   return result.rows;

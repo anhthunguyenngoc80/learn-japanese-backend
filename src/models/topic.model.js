@@ -10,7 +10,14 @@ const createTopic = async (collection_id, name, executor = pool) => {
 
 const getAllTopics = async (collection_id, executor = pool) => {
   const result = await executor.query(
-    "select * from topics where collection_id=$1",
+    `select t.*, coalesce(w.word_count, 0) as word_count
+     from topics t
+     left join (
+       select topic_id, count(*) as word_count
+       from words
+       group by topic_id
+     ) w on t.topic_id = w.topic_id
+     where t.collection_id=$1`,
     [collection_id],
   );
   return result.rows;
