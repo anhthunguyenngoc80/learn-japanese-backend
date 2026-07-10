@@ -36,6 +36,7 @@ const getTopicById = async (topic_id, limit) => {
     collection_id: topic.collection_id,
     topic_id: topic.topic_id,
     name: topic.name,
+    word_count: topic.word_count,
     words: wordsWithExamples,
   };
 };
