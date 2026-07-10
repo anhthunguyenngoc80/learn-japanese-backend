@@ -1,4 +1,5 @@
 const userProgressModel = require("../models/user_progress.model");
+const topicModel = require("../models/topic.model");
 
 const DEFAULT_LIMIT = 10;
 
@@ -7,6 +8,9 @@ const getFlashcardWordsByTopicId = async (
   topic_id,
   limit = DEFAULT_LIMIT,
 ) => {
+  // Get topic info
+  const topic = await topicModel.getTopicById(topic_id);
+
   // Try to get words with mastery = 0 first
   const masteryZeroWords = await userProgressModel.getWordsByMasteryZeroByTopic(
     user_id,
@@ -14,19 +18,23 @@ const getFlashcardWordsByTopicId = async (
     limit,
   );
 
+  let words;
   if (masteryZeroWords.length > 0) {
-    return masteryZeroWords;
-  }
-
-  // If no words with mastery = 0, get words with lowest mastery first
-  const lowestMasteryWords =
-    await userProgressModel.getWordsByLowestMasteryByTopic(
+    words = masteryZeroWords;
+  } else {
+    // If no words with mastery = 0, get words with lowest mastery first
+    words = await userProgressModel.getWordsByLowestMasteryByTopic(
       user_id,
       topic_id,
       limit,
     );
+  }
 
-  return lowestMasteryWords;
+  return {
+    topic_id: topic.topic_id,
+    topic_name: topic.name,
+    words,
+  };
 };
 
 module.exports = {

@@ -24,7 +24,7 @@ const getAllWords = async (topic_id, executor = pool) => {
 
 const getWordsByLimit = async (topic_id, limit, executor = pool) => {
   const result = await executor.query(
-    "select * from words where topic_id=$1 order by random() limit $2",
+    "select * from words where topic_id=$1 limit $2",
     [topic_id, limit],
   );
   return result.rows;
