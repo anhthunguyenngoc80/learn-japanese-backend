@@ -1,7 +1,7 @@
 const pool = require("../config/db");
 const models = require("../models");
 
-const createCollection = async (user_id, name, topics) => {
+const createCollection = async (user_id, name, visibility, topics) => {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -9,6 +9,7 @@ const createCollection = async (user_id, name, topics) => {
     const collection = await models.Collection.createCollection(
       user_id,
       name,
+      visibility,
       client,
     );
 
@@ -51,7 +52,7 @@ const createCollection = async (user_id, name, topics) => {
   }
 };
 
-const deleteCollection = async (user_id, collection_id) => {
+const deleteCollection = async (collection_id) => {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -60,7 +61,6 @@ const deleteCollection = async (user_id, collection_id) => {
     await models.Word.deleteByCollectionId(collection_id, client);
     await models.Topic.deleteByCollectionId(collection_id, client);
     const result = await models.Collection.deleteCollection(
-      user_id,
       collection_id,
       client,
     );
@@ -75,11 +75,8 @@ const deleteCollection = async (user_id, collection_id) => {
   }
 };
 
-const getCollectionDetail = async (user_id, collection_id) => {
-  const collections = await models.Collection.getCollectionById(
-    user_id,
-    collection_id,
-  );
+const getCollectionDetail = async (collection_id) => {
+  const collections = await models.Collection.getCollectionById(collection_id);
   if (!collections || collections.length === 0) {
     return null;
   }
