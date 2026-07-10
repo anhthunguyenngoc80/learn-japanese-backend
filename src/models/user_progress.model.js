@@ -7,7 +7,7 @@ const getWordsByMasteryZeroByTopic = async (
   executor = pool,
 ) => {
   const result = await executor.query(
-    `select w.word_id, w.text
+    `select w.*
      from words w
      left join user_progress p
        on p.word_id = w.word_id
