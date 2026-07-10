@@ -32,7 +32,7 @@ const getFlashcardWordsByTopicId = async (
 
   return {
     topic_id: topic.topic_id,
-    topic_name: topic.name,
+    name: topic.name,
     words,
   };
 };
