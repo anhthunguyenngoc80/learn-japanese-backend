@@ -41,15 +41,13 @@ const getWordsByLowestMasteryByTopic = async (
 
 const getFlashcardWord = async (user_id, limit, executor = pool) => {
   const result = await executor.query(
-    `SELECT w.word_id, w.text
-     FROM words w
-     WHERE NOT EXISTS (
-       SELECT 1
-       FROM user_progress up
-       WHERE up.word_id = w.word_id
-         AND up.user_id = $1
-     )
-     LIMIT $2`,
+    `SELECT w.id AS word_id, w.word
+      FROM words w
+      WHERE NOT EXISTS (
+          SELECT 1 FROM user_progress up
+          WHERE up.word_id = w.id AND up.user_id = $1
+      )
+      LIMIT $2;`,
     [user_id, limit],
   );
   return result.rows;
