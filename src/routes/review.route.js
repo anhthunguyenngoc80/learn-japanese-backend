@@ -10,4 +10,10 @@ router.get(
   reviewController.getFlashcardWordsByTopicId,
 );
 
+router.get(
+  "/practice/:topicId",
+  verifyToken,
+  reviewController.getWordsForReview,
+);
+
 module.exports = router;

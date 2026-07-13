@@ -3,6 +3,11 @@ const topicModel = require("../models/topic.model");
 
 const DEFAULT_LIMIT = 10;
 
+const getWordsForReview = async (user_id, topic_id, limit = DEFAULT_LIMIT) => {
+  const words = await userProgressModel.getWordsForReview(user_id, topic_id, limit);
+  return words;
+};
+
 const getFlashcardWordsByTopicId = async (
   user_id,
   topic_id,
@@ -12,9 +17,8 @@ const getFlashcardWordsByTopicId = async (
   const topic = await topicModel.getTopicById(topic_id);
 
   // Try to get words with mastery = 0 first
-  const masteryZeroWords = await userProgressModel.getWordsByMasteryZeroByTopic(
+  const masteryZeroWords = await userProgressModel.getFlashcardWord(
     user_id,
-    topic_id,
     limit,
   );
 
@@ -23,7 +27,7 @@ const getFlashcardWordsByTopicId = async (
     words = masteryZeroWords;
   } else {
     // If no words with mastery = 0, get words with lowest mastery first
-    words = await userProgressModel.getWordsByLowestMasteryByTopic(
+    words = await userProgressModel.getWordsForReview(
       user_id,
       topic_id,
       limit,
@@ -39,4 +43,5 @@ const getFlashcardWordsByTopicId = async (
 
 module.exports = {
   getFlashcardWordsByTopicId,
+  getWordsForReview,
 };
