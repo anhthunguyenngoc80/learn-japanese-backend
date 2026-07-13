@@ -32,7 +32,23 @@ const getWordsForReview = async (user_id, topic_id, limit, executor = pool) => {
   return result.rows;
 };
 
+const updateAfterAttempt = async (
+  user_id,
+  word_id,
+  skill,
+  is_correct,
+  response_time_ms,
+  executor = pool,
+) => {
+  const result = await executor.query(
+    `SELECT update_after_attempt($1, $2, $3, $4, $5)`,
+    [user_id, word_id, skill, is_correct, response_time_ms],
+  );
+  return result.rows[0];
+};
+
 module.exports = {
   getFlashcardWord,
   getWordsForReview,
+  updateAfterAttempt,
 };

@@ -41,7 +41,25 @@ const getFlashcardWordsByTopicId = async (
   };
 };
 
+const updateAfterAttempt = async (
+  user_id,
+  word_id,
+  skill,
+  is_correct,
+  response_time_ms,
+) => {
+  const result = await userProgressModel.updateAfterAttempt(
+    user_id,
+    word_id,
+    skill,
+    is_correct,
+    response_time_ms,
+  );
+  return result;
+};
+
 module.exports = {
   getFlashcardWordsByTopicId,
   getWordsForReview,
+  updateAfterAttempt,
 };

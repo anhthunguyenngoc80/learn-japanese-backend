@@ -16,4 +16,10 @@ router.get(
   reviewController.getWordsForReview,
 );
 
+router.post(
+  "/update-mastery",
+  verifyToken,
+  reviewController.updateAfterAttempt,
+);
+
 module.exports = router;

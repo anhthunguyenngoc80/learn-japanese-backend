@@ -36,7 +36,38 @@ const getFlashcardWordsByTopicId = async (req, res) => {
   }
 };
 
+const updateAfterAttempt = async (req, res) => {
+  const user_id = req.user.user_id;
+  const { word_id, skill, is_correct, response_time_ms } = req.body;
+
+  if (!word_id || !skill || is_correct === undefined || !response_time_ms) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  const validSkills = ["recognition", "listening", "writing"];
+  if (!validSkills.includes(skill)) {
+    return res.status(400).json({ message: "Invalid skill value" });
+  }
+
+  try {
+    const result = await reviewService.updateAfterAttempt(
+      user_id,
+      word_id,
+      skill,
+      is_correct,
+      response_time_ms,
+    );
+    res
+      .status(200)
+      .json({ message: "Update skill mastery successfully", data: result });
+  } catch (error) {
+    console.log("Update skill mastery failed", error);
+    res.status(500).json({ message: "Update skill mastery failed" });
+  }
+};
+
 module.exports = {
   getFlashcardWordsByTopicId,
   getWordsForReview,
+  updateAfterAttempt,
 };
