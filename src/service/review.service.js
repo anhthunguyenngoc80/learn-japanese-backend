@@ -1,4 +1,4 @@
-const userProgressModel = require("../models/user_progress.model");
+const userProgressModel = require("../models/review.model");
 const topicModel = require("../models/topic.model");
 
 const DEFAULT_LIMIT = 10;
