@@ -48,7 +48,7 @@ const updateAfterAttempt = async (req, res) => {
     return res.status(400).json({ message: "Missing is_correct" });
   }
 
-  if (!response_time_ms) {
+  if (response_time_ms === undefined || response_time_ms === null) {
     return res.status(400).json({ message: "Missing response_time_ms" });
   }
 
