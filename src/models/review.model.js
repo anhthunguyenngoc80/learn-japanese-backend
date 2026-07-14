@@ -24,7 +24,6 @@ const getWordsForReview = async (user_id, topic_id, limit, executor = pool) => {
      JOIN words w ON up.word_id = w.word_id
      WHERE up.user_id = $1
        AND w.topic_id = $2
-       AND up.next_review_at <= now()
      ORDER BY up.next_review_at ASC
      LIMIT $3`,
     [user_id, topic_id, limit],
