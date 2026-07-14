@@ -39,7 +39,6 @@ const getFlashcardWordsByTopicId = async (req, res) => {
 const updateAfterAttempt = async (req, res) => {
   const user_id = req.user.user_id;
   const { word_id, skill, is_correct, response_time_ms } = req.body;
-  console.log(req.body)
 
   if (!word_id) {
     return res.status(400).json({ message: "Missing word_id" });
