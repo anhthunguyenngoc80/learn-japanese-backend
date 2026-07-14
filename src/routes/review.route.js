@@ -16,7 +16,7 @@ router.get(
   reviewController.getWordsForReview,
 );
 
-router.post(
+router.put(
   "/update-mastery",
   verifyToken,
   reviewController.updateAfterAttempt,
