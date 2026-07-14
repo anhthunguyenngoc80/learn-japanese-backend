@@ -4,8 +4,16 @@ const topicModel = require("../models/topic.model");
 const DEFAULT_LIMIT = 10;
 
 const getWordsForReview = async (user_id, topic_id, limit = DEFAULT_LIMIT) => {
+  // Get topic info
+  const topic = await topicModel.getTopicById(topic_id);
+
   const words = await userProgressModel.getWordsForReview(user_id, topic_id, limit);
-  return words;
+
+  return {
+    topic_id: topic.topic_id,
+    name: topic.name,
+    words,
+  };
 };
 
 const getFlashcardWordsByTopicId = async (
