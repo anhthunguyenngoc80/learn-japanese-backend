@@ -20,9 +20,17 @@ const getTopicById = async (user_id, topic_id, limit) => {
     }),
   );
 
+  const totalWords = wordsWithExamples.length;
+  const masteredWords = wordsWithExamples.filter(
+    (w) => (w.overall_mastery || 0) > 0,
+  ).length;
+  const progress =
+    totalWords > 0 ? Math.round((masteredWords / totalWords) * 10000) / 100 : 0;
+
   return {
     ...topic,
     words: wordsWithExamples,
+    progress,
   };
 };
 

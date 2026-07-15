@@ -8,17 +8,36 @@ const createTopic = async (collection_id, name, executor = pool) => {
   return result.rows[0];
 };
 
-const getAllTopics = async (collection_id, executor = pool) => {
+const getAllTopics = async (collection_id, user_id, executor = pool) => {
   const result = await executor.query(
-    `select t.*, coalesce(w.word_count, 0) as word_count
+    `select t.*,
+       coalesce(w.word_count, 0) as word_count,
+       case
+         when coalesce(w.word_count, 0) > 0
+         then round(
+           (coalesce(p.mastered_count, 0)::numeric / w.word_count) * 100,
+           2
+         )
+         else 0
+       end as progress
      from topics t
      left join (
        select topic_id, count(*) as word_count
        from words
        group by topic_id
      ) w on t.topic_id = w.topic_id
-     where t.collection_id=$1`,
-    [collection_id],
+     left join (
+       select w.topic_id, count(*) as mastered_count
+       from user_progress up
+       join words w on up.word_id = w.word_id
+       where up.user_id = $2
+         and (COALESCE(up.recognition_mastery, 0)
+            + COALESCE(up.listening_mastery, 0)
+            + COALESCE(up.writing_mastery, 0)) > 0
+       group by w.topic_id
+     ) p on t.topic_id = p.topic_id
+     where t.collection_id = $1`,
+    [collection_id, user_id],
   );
   return result.rows;
 };

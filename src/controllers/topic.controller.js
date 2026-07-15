@@ -16,8 +16,9 @@ const createTopic = async (req, res) => {
 
 const getAllTopics = async (req, res) => {
   const { collectionId } = req.params;
+  const user_id = req.user.user_id;
   try {
-    const result = await topicModel.getAllTopics(collectionId);
+    const result = await topicModel.getAllTopics(collectionId, user_id);
     res.status(201).json({ message: "Get Topics successfully", data: result });
   } catch (error) {
     console.log("Query failed", error);
