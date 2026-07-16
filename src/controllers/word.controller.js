@@ -17,8 +17,9 @@ const createWord = async (req, res) => {
 
 const getAllWords = async (req, res) => {
   const { topicId } = req.params;
+  const user_id = req.user.user_id;
   try {
-    const result = await wordModel.getAllWords(topicId);
+    const result = await wordModel.getAllWords(topicId, user_id);
     res.status(200).json({ message: "Get words successfully", data: result });
   } catch (error) {
     console.log("Query failed", error);

@@ -1,5 +1,6 @@
 const pool = require("../config/db");
 const models = require("../models");
+const topicService = require("./topic.service");
 
 const createCollection = async (user_id, name, visibility, topics) => {
   const client = await pool.connect();
@@ -82,7 +83,7 @@ const getCollectionDetail = async (collection_id, user_id) => {
   }
 
   const collection = collections[0];
-  const topics = await models.Topic.getAllTopics(collection_id, user_id);
+  const topics = await topicService.getAllTopics(collection_id, user_id);
 
   return {
     collection_id: collection.collection_id,

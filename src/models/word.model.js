@@ -15,10 +15,23 @@ const createWord = async (topic_id, word, executor = pool) => {
   return result.rows[0];
 };
 
-const getAllWords = async (topic_id, executor = pool) => {
-  const result = await executor.query("select * from words where topic_id=$1", [
-    topic_id,
-  ]);
+const getAllWords = async (topic_id, user_id, executor = pool) => {
+  const result = await executor.query(
+    `select w.*,
+    COALESCE(up.recognition_mastery, 0) AS recognition_mastery,
+    COALESCE(up.listening_mastery, 0)   AS listening_mastery,
+    COALESCE(up.writing_mastery, 0)      AS writing_mastery,
+    COALESCE(
+        (up.recognition_mastery + up.listening_mastery + up.writing_mastery) / 3.0,
+        0
+    ) AS overall_mastery,
+    up.next_review_at
+    from words w
+    left join user_progress up
+    on w.word_id = up.word_id and up.user_id = $2
+    where topic_id=$1`,
+    [topic_id, user_id],
+  );
   return result.rows;
 };
 
