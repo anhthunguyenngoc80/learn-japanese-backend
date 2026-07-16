@@ -88,7 +88,7 @@ const getCollectionDetail = async (collection_id, user_id) => {
   const topic_count = topics.length;
   const progress =
     topic_count > 0
-      ? Math.round((topics.reduce((sum, topic) => sum + (topic.progress || 0), 0) / topic_count) * 10) / 10
+      ? topics.reduce((sum, topic) => sum + (topic.progress || 0), 0) / topic_count
       : 0;
 
   return {
@@ -101,7 +101,25 @@ const getCollectionDetail = async (collection_id, user_id) => {
 };
 
 const getAllCollections = async (user_id) => {
-  return await models.Collection.getAllCollections(user_id);
+  const collections = await models.Collection.getAllCollections(user_id);
+
+  const collectionsWithProgress = await Promise.all(
+    collections.map(async (collection) => {
+      const topics = await topicService.getAllTopics(collection.collection_id, user_id);
+      const topic_count = topics.length;
+      const progress =
+        topic_count > 0
+          ? topics.reduce((sum, topic) => sum + (topic.progress || 0), 0) / topic_count
+          : 0;
+
+      return {
+        ...collection,
+        progress,
+      };
+    }),
+  );
+
+  return collectionsWithProgress;
 };
 
 module.exports = {

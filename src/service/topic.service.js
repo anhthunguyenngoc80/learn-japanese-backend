@@ -21,7 +21,7 @@ const getTopicById = async (user_id, topic_id, limit) => {
   );
 
   const progressData = await models.Topic.getTopicProgress(user_id, topic.topic_id);
-  const word_count = progressData ? parseInt(progressData.total_words, 10) : 0;
+  const word_count = progressData.total_words;
   const progress = progressData ? parseFloat(progressData.progress_percentage) : 0;
 
   return {
@@ -40,7 +40,7 @@ const getAllTopics = async (collection_id, user_id) => {
       const progress = await models.Topic.getTopicProgress(user_id, topic.topic_id);
       return {
         ...topic,
-        word_count: progress ? parseInt(progress.total_words, 10) : 0,
+        word_count: progress.total_words,
         progress: progress ? parseFloat(progress.progress_percentage) : 0,
       };
     }),
