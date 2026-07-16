@@ -85,10 +85,18 @@ const getCollectionDetail = async (collection_id, user_id) => {
   const collection = collections[0];
   const topics = await topicService.getAllTopics(collection_id, user_id);
 
+  const topic_count = topics.length;
+  const progress =
+    topic_count > 0
+      ? Math.round((topics.reduce((sum, topic) => sum + (topic.progress || 0), 0) / topic_count) * 10) / 10
+      : 0;
+
   return {
     collection_id: collection.collection_id,
     name: collection.name,
     topics: topics,
+    topic_count: topic_count,
+    progress,
   };
 };
 
