@@ -32,8 +32,9 @@ const getAllCollections = async (req, res) => {
 
 const getCollectionById = async (req, res) => {
   const { collectionId } = req.params;
+  const user_id = req.user.user_id;
   try {
-    const result = await collectionService.getCollectionDetail(collectionId);
+    const result = await collectionService.getCollectionDetail(collectionId, user_id);
     if (!result) {
       return res.status(404).json({ message: "Collection not found" });
     }

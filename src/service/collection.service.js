@@ -75,14 +75,14 @@ const deleteCollection = async (collection_id) => {
   }
 };
 
-const getCollectionDetail = async (collection_id) => {
+const getCollectionDetail = async (collection_id, user_id) => {
   const collections = await models.Collection.getCollectionById(collection_id);
   if (!collections || collections.length === 0) {
     return null;
   }
 
   const collection = collections[0];
-  const topics = await models.Topic.getAllTopics(collection_id);
+  const topics = await models.Topic.getAllTopics(collection_id, user_id);
 
   return {
     collection_id: collection.collection_id,
