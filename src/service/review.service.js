@@ -7,7 +7,11 @@ const getWordsForReview = async (user_id, topic_id, limit = DEFAULT_LIMIT) => {
   // Get topic info
   const topic = await topicModel.getTopicById(topic_id);
 
-  const words = await userProgressModel.getWordsForReview(user_id, topic_id, limit);
+  const words = await userProgressModel.getWordsForReview(
+    user_id,
+    topic_id,
+    limit,
+  );
 
   return {
     topic_id: topic.topic_id,
@@ -27,6 +31,7 @@ const getFlashcardWordsByTopicId = async (
   // Try to get words with mastery = 0 first
   const masteryZeroWords = await userProgressModel.getFlashcardWord(
     user_id,
+    topic_id,
     limit,
   );
 
@@ -35,11 +40,7 @@ const getFlashcardWordsByTopicId = async (
     words = masteryZeroWords;
   } else {
     // If no words with mastery = 0, get words with lowest mastery first
-    words = await userProgressModel.getWordsForReview(
-      user_id,
-      topic_id,
-      limit,
-    );
+    words = await userProgressModel.getWordsForReview(user_id, topic_id, limit);
   }
 
   return {
