@@ -15,6 +15,21 @@ const createWord = async (req, res) => {
   }
 };
 
+const createWords = async (req, res) => {
+  const { topicId } = req.params;
+  const { words } = req.body;
+  try {
+    if (!Array.isArray(words) || words.length === 0) {
+      return res.status(400).json({ message: "Words array is required" });
+    }
+    const result = await wordModel.createWords(topicId, words);
+    res.status(201).json({ message: "Create words successfully", data: result });
+  } catch (error) {
+    console.log("Create words failed", error);
+    res.status(401).json({ message: "Create failed" });
+  }
+};
+
 const getAllWords = async (req, res) => {
   const { topicId } = req.params;
   const user_id = req.user.user_id;
@@ -40,6 +55,7 @@ const getWordById = async (req, res) => {
 
 module.exports = {
   createWord,
+  createWords,
   getAllWords,
   getWordById,
 };

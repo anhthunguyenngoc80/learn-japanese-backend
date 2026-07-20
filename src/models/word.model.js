@@ -73,8 +73,37 @@ const deleteByCollectionId = async (collection_id, executor = pool) => {
   return result;
 };
 
+const createWords = async (topic_id, words, executor = pool) => {
+  if (!words || words.length === 0) return [];
+  const values = [];
+  const params = [];
+  let paramIndex = 1;
+
+  for (const w of words) {
+    params.push(
+      `($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, $${paramIndex + 4}, $${paramIndex + 5})`
+    );
+    values.push(
+      topic_id,
+      w.text,
+      w.sv_word,
+      w.reading,
+      w.meaning,
+      w.part_of_speech,
+    );
+    paramIndex += 6;
+  }
+
+  const query = `insert into words (topic_id, text, sv_word, reading, meaning, part_of_speech) values ${params.join(
+    ", "
+  )} returning *`;
+  const result = await executor.query(query, values);
+  return result.rows;
+};
+
 module.exports = {
   createWord,
+  createWords,
   getAllWords,
   getWordById,
   deleteByCollectionId,
