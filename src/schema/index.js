@@ -116,6 +116,62 @@ const WordIdParams = z.object({
   }),
 });
 
+const CreateExampleSchema = z.object({
+  body: z.object({
+    content: z.string().min(1),
+    meaning: z.string().min(1),
+  }),
+  params: z.object({
+    wordId: z.coerce.number().int().positive(),
+  }),
+});
+
+const UpdateExampleSchema = z.object({
+  body: z.object({
+    content: z.string().min(1),
+    meaning: z.string().min(1),
+  }),
+  params: z.object({
+    exampleId: z.coerce.number().int().positive(),
+  }),
+});
+
+const ExampleIdParams = z.object({
+  params: z.object({
+    exampleId: z.coerce.number().int().positive(),
+  }),
+});
+
+const CreateExamplesBulkSchema = z.object({
+  body: z.object({
+    examples: z
+      .array(
+        z.object({
+          content: z.string().min(1),
+          meaning: z.string().min(1),
+        })
+      )
+      .min(1),
+  }),
+  params: z.object({
+    wordId: z.coerce.number().int().positive(),
+  }),
+});
+
+const UpdateExamplesBulkSchema = z.object({
+  body: z.object({
+    examples: z
+      .array(
+        z.object({
+          example_id: z.number().int().positive(),
+          content: z.string().min(1).optional(),
+          meaning: z.string().min(1).optional(),
+        })
+      )
+      .min(1),
+  }),
+});
+
 // ==================== Review Schemas ====================
 const ReviewTopicParams = z.object({
   params: z.object({
@@ -147,6 +203,11 @@ module.exports = {
   UpdateWordsBulkSchema,
   TopicIdParamsWords,
   WordIdParams,
+  CreateExampleSchema,
+  UpdateExampleSchema,
+  ExampleIdParams,
+  CreateExamplesBulkSchema,
+  UpdateExamplesBulkSchema,
   ReviewTopicParams,
   UpdateMasterySchema,
 };

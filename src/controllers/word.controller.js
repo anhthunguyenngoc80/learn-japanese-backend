@@ -64,10 +64,25 @@ const updateWords = async (req, res) => {
   }
 };
 
+const deleteWord = async (req, res) => {
+  const { wordId } = req.params;
+  try {
+    const result = await wordModel.deleteWord(wordId);
+    if (!result) {
+      return res.status(404).json({ message: "Word not found" });
+    }
+    res.status(200).json({ message: "Delete word successfully", data: result });
+  } catch (error) {
+    console.log("Delete word failed", error);
+    res.status(500).json({ message: "Delete word failed" });
+  }
+};
+
 module.exports = {
   createWord,
   createWords,
   updateWords,
   getAllWords,
   getWordById,
+  deleteWord,
 };

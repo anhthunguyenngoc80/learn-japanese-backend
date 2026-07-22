@@ -143,12 +143,20 @@ const updateWords = async (words, executor = pool) => {
   return results;
 };
 
+const deleteWord = async (word_id, executor = pool) => {
+  const result = await executor.query("delete from words where word_id=$1 returning *", [
+    word_id,
+  ]);
+  return result.rows[0];
+};
+
 module.exports = {
   createWord,
   createWords,
   updateWords,
   getAllWords,
   getWordById,
+  deleteWord,
   deleteByCollectionId,
   getWordsByLimit,
 };

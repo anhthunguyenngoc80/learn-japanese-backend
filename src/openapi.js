@@ -667,6 +667,57 @@ registry.registerPath({
 });
 
 registry.registerPath({
+  method: "delete",
+  path: "/words/{wordId}",
+  summary: "Delete a word by ID",
+  tags: ["Words"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({
+      wordId: z.coerce.number().int().positive(),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Word deleted successfully",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            data: z.object({
+              word_id: z.number(),
+              topic_id: z.number(),
+              text: z.string(),
+              sv_word: z.string(),
+              reading: z.string(),
+              meaning: z.string(),
+              part_of_speech: z.string().optional(),
+              created_at: z.string(),
+            }),
+          }),
+        },
+      },
+    },
+    404: {
+      description: "Word not found",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
   method: "put",
   path: "/words/bulk",
   summary: "Update multiple words",
@@ -713,6 +764,281 @@ registry.registerPath({
     },
     400: {
       description: "Bad request",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+  },
+});
+
+// ==================== Example Routes ====================
+registry.registerComponent("schemas", "Example", z.object({
+  example_id: z.number(),
+  word_id: z.number(),
+  content: z.string(),
+  meaning: z.string(),
+  created_at: z.string(),
+}));
+
+registry.registerPath({
+  method: "post",
+  path: "/words/{wordId}/examples",
+  summary: "Create a new example for a word",
+  tags: ["Examples"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({
+      wordId: z.coerce.number().int().positive(),
+    }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            content: z.string().min(1),
+            meaning: z.string().min(1),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    201: {
+      description: "Example created successfully",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            data: z.object({
+              example_id: z.number(),
+              word_id: z.number(),
+              content: z.string(),
+              meaning: z.string(),
+              created_at: z.string(),
+            }),
+          }),
+        },
+      },
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/words/{wordId}/examples/bulk",
+  summary: "Create multiple examples for a word",
+  tags: ["Examples"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({
+      wordId: z.coerce.number().int().positive(),
+    }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            examples: z.array(z.object({
+              content: z.string().min(1),
+              meaning: z.string().min(1),
+            })).min(1),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    201: {
+      description: "Examples created successfully",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            data: z.array(z.object({
+              example_id: z.number(),
+              word_id: z.number(),
+              content: z.string(),
+              meaning: z.string(),
+              created_at: z.string(),
+            })),
+          }),
+        },
+      },
+    },
+    400: {
+      description: "Bad request",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "put",
+  path: "/examples/{exampleId}",
+  summary: "Update an example",
+  tags: ["Examples"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({
+      exampleId: z.coerce.number().int().positive(),
+    }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            content: z.string().min(1),
+            meaning: z.string().min(1),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Example updated successfully",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            data: z.object({
+              example_id: z.number(),
+              word_id: z.number(),
+              content: z.string(),
+              meaning: z.string(),
+              created_at: z.string(),
+            }),
+          }),
+        },
+      },
+    },
+    404: {
+      description: "Example not found",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "put",
+  path: "/examples/bulk",
+  summary: "Update multiple examples",
+  tags: ["Examples"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            examples: z.array(z.object({
+              example_id: z.number().int().positive(),
+              content: z.string().min(1).optional(),
+              meaning: z.string().min(1).optional(),
+            })).min(1),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Examples updated successfully",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            data: z.array(z.object({
+              example_id: z.number(),
+              word_id: z.number(),
+              content: z.string(),
+              meaning: z.string(),
+              created_at: z.string(),
+            })),
+          }),
+        },
+      },
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/Error" },
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "delete",
+  path: "/examples/{exampleId}",
+  summary: "Delete an example",
+  tags: ["Examples"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({
+      exampleId: z.coerce.number().int().positive(),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Example deleted successfully",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            data: z.object({
+              example_id: z.number(),
+              word_id: z.number(),
+              content: z.string(),
+              meaning: z.string(),
+              created_at: z.string(),
+            }),
+          }),
+        },
+      },
+    },
+    404: {
+      description: "Example not found",
       content: {
         "application/json": {
           schema: { $ref: "#/components/schemas/Error" },
