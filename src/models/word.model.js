@@ -101,9 +101,52 @@ const createWords = async (topic_id, words, executor = pool) => {
   return result.rows;
 };
 
+const updateWords = async (words, executor = pool) => {
+  if (!words || words.length === 0) return [];
+
+  const results = [];
+
+  for (const w of words) {
+    const fields = [];
+    const values = [];
+    let paramIndex = 1;
+
+    if (w.text !== undefined) {
+      fields.push(`text = $${paramIndex++}`);
+      values.push(w.text);
+    }
+    if (w.sv_word !== undefined) {
+      fields.push(`sv_word = $${paramIndex++}`);
+      values.push(w.sv_word);
+    }
+    if (w.reading !== undefined) {
+      fields.push(`reading = $${paramIndex++}`);
+      values.push(w.reading);
+    }
+    if (w.meaning !== undefined) {
+      fields.push(`meaning = $${paramIndex++}`);
+      values.push(w.meaning);
+    }
+    if (w.part_of_speech !== undefined) {
+      fields.push(`part_of_speech = $${paramIndex++}`);
+      values.push(w.part_of_speech);
+    }
+
+    if (fields.length === 0) continue;
+
+    values.push(w.word_id);
+    const query = `update words set ${fields.join(", ")} where word_id = $${paramIndex} returning *`;
+    const result = await executor.query(query, values);
+    results.push(result.rows[0]);
+  }
+
+  return results;
+};
+
 module.exports = {
   createWord,
   createWords,
+  updateWords,
   getAllWords,
   getWordById,
   deleteByCollectionId,

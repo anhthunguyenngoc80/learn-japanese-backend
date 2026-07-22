@@ -53,9 +53,21 @@ const getWordById = async (req, res) => {
   }
 };
 
+const updateWords = async (req, res) => {
+  const { words } = req.body;
+  try {
+    const result = await wordModel.updateWords(words);
+    res.status(200).json({ message: "Update words successfully", data: result });
+  } catch (error) {
+    console.log("Update words failed", error);
+    res.status(500).json({ message: "Update words failed" });
+  }
+};
+
 module.exports = {
   createWord,
   createWords,
+  updateWords,
   getAllWords,
   getWordById,
 };
