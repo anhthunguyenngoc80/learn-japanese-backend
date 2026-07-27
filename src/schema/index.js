@@ -172,6 +172,23 @@ const UpdateExamplesBulkSchema = z.object({
   }),
 });
 
+// ==================== Section Schemas ====================
+const CreateSectionsBulkSchema = z.object({
+  body: z.object({
+    sections: z
+      .array(
+        z.object({
+          section_type: z.string().min(1),
+          content: z.string().min(1),
+        })
+      )
+      .min(1),
+  }),
+  params: z.object({
+    topicId: z.coerce.number().int().positive(),
+  }),
+});
+
 // ==================== Review Schemas ====================
 const ReviewTopicParams = z.object({
   params: z.object({
@@ -210,4 +227,5 @@ module.exports = {
   UpdateExamplesBulkSchema,
   ReviewTopicParams,
   UpdateMasterySchema,
+  CreateSectionsBulkSchema,
 };

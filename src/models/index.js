@@ -3,4 +3,5 @@ module.exports = {
   Topic: require("./topic.model"),
   Word: require("./word.model"),
   Example: require("./example.model"),
+  Section: require("./section.model"),
 };
