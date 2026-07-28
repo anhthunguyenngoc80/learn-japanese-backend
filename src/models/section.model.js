@@ -12,14 +12,14 @@ const createSections = async (sections, executor = pool) => {
     paramIndex += 4;
   }
 
-  const query = `insert into sections (topic_id, section_type, content, order) values ${params.join(", ")} returning *`;
+  const query = `insert into sections (topic_id, section_type, content, section_order) values ${params.join(", ")} returning *`;
   const result = await executor.query(query, values);
   return result.rows;
 };
 
 const getSectionsByTopicId = async (topic_id, executor = pool) => {
   const result = await executor.query(
-    "select * from sections where topic_id=$1 order by order",
+    "select * from sections where topic_id=$1 order by section_order",
     [topic_id],
   );
   return result.rows;
