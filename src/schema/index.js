@@ -247,6 +247,52 @@ const QuestionIdParams = z.object({
   }),
 });
 
+const CreateAnswersBulkSchema = z.object({
+  body: z.object({
+    answers: z
+      .array(
+        z.object({
+          content: z.string().min(1),
+          is_correct: z.boolean(),
+        })
+      )
+      .min(1),
+  }),
+  params: z.object({
+    questionId: z.coerce.number().int().positive(),
+  }),
+});
+
+const UpdateAnswersBulkSchema = z.object({
+  body: z.object({
+    answers: z
+      .array(
+        z.object({
+          answer_id: z.number().int().positive(),
+          content: z.string().min(1).optional(),
+          is_correct: z.boolean().optional(),
+        })
+      )
+      .min(1),
+  }),
+});
+
+const AnswerIdParams = z.object({
+  params: z.object({
+    answerId: z.coerce.number().int().positive(),
+  }),
+});
+
+const UpdateAnswerSchema = z.object({
+  body: z.object({
+    content: z.string().min(1),
+    is_correct: z.boolean(),
+  }),
+  params: z.object({
+    answerId: z.coerce.number().int().positive(),
+  }),
+});
+
 const UpdateQuestionSchema = z.object({
   body: z.object({
     question_type: z.string().min(1),
@@ -302,4 +348,8 @@ module.exports = {
   UpdateQuestionsBulkSchema,
   QuestionIdParams,
   UpdateQuestionSchema,
+  CreateAnswersBulkSchema,
+  UpdateAnswersBulkSchema,
+  AnswerIdParams,
+  UpdateAnswerSchema,
 };

@@ -5,4 +5,5 @@ module.exports = {
   Example: require("./example.model"),
   Section: require("./section.model"),
   Question: require("./question.model"),
+  Answer: require("./answer.model"),
 };
