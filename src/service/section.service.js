@@ -8,4 +8,8 @@ const createSections = async (topic_id, sections) => {
   return await models.Section.createSections(sectionsWithTopic);
 };
 
-module.exports = { createSections };
+const updateSections = async (sections) => {
+  return await models.Section.updateSections(sections);
+};
+
+module.exports = { createSections, updateSections };

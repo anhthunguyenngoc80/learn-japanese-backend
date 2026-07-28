@@ -17,4 +17,20 @@ const createSections = async (req, res) => {
   }
 };
 
-module.exports = { createSections };
+const updateSectionsBulk = async (req, res) => {
+  const { sections } = req.body;
+
+  try {
+    if (!Array.isArray(sections) || sections.length === 0) {
+      return res.status(400).json({ message: "Sections array is required" });
+    }
+
+    const result = await sectionService.updateSections(sections);
+    res.status(200).json({ message: "Update sections successfully", data: result });
+  } catch (error) {
+    console.log("Update sections failed", error);
+    res.status(500).json({ message: "Update sections failed" });
+  }
+};
+
+module.exports = { createSections, updateSectionsBulk };

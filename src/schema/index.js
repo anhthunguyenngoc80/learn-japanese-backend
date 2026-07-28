@@ -180,12 +180,80 @@ const CreateSectionsBulkSchema = z.object({
         z.object({
           section_type: z.string().min(1),
           content: z.string().min(1),
+          order: z.number().int().nonnegative(),
         })
       )
       .min(1),
   }),
   params: z.object({
     topicId: z.coerce.number().int().positive(),
+  }),
+});
+
+const UpdateSectionsBulkSchema = z.object({
+  body: z.object({
+    sections: z
+      .array(
+        z.object({
+          section_id: z.number().int().positive(),
+          section_type: z.string().min(1).optional(),
+          content: z.string().min(1).optional(),
+          order: z.number().int().nonnegative().optional(),
+        })
+      )
+      .min(1),
+  }),
+});
+
+const SectionIdParams = z.object({
+  params: z.object({
+    sectionId: z.coerce.number().int().positive(),
+  }),
+});
+
+const CreateQuestionsBulkSchema = z.object({
+  body: z.object({
+    questions: z
+      .array(
+        z.object({
+          question_type: z.string().min(1),
+          content: z.string().min(1),
+        })
+      )
+      .min(1),
+  }),
+  params: z.object({
+    sectionId: z.coerce.number().int().positive(),
+  }),
+});
+
+const UpdateQuestionsBulkSchema = z.object({
+  body: z.object({
+    questions: z
+      .array(
+        z.object({
+          question_id: z.number().int().positive(),
+          question_type: z.string().min(1).optional(),
+          content: z.string().min(1).optional(),
+        })
+      )
+      .min(1),
+  }),
+});
+
+const QuestionIdParams = z.object({
+  params: z.object({
+    questionId: z.coerce.number().int().positive(),
+  }),
+});
+
+const UpdateQuestionSchema = z.object({
+  body: z.object({
+    question_type: z.string().min(1),
+    content: z.string().min(1),
+  }),
+  params: z.object({
+    questionId: z.coerce.number().int().positive(),
   }),
 });
 
@@ -228,4 +296,10 @@ module.exports = {
   ReviewTopicParams,
   UpdateMasterySchema,
   CreateSectionsBulkSchema,
+  UpdateSectionsBulkSchema,
+  SectionIdParams,
+  CreateQuestionsBulkSchema,
+  UpdateQuestionsBulkSchema,
+  QuestionIdParams,
+  UpdateQuestionSchema,
 };

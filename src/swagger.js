@@ -204,6 +204,167 @@ const options = {
             },
           },
         },
+        CreateExampleInput: {
+          type: "object",
+          required: ["content", "meaning"],
+          properties: {
+            content: {
+              type: "string",
+              description: "Example sentence content",
+            },
+            meaning: {
+              type: "string",
+              description: "Example meaning",
+            },
+          },
+        },
+        CreateExampleBulkInput: {
+          type: "object",
+          required: ["examples"],
+          properties: {
+            examples: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/CreateExampleInput",
+              },
+            },
+          },
+        },
+        CreateSectionInput: {
+          type: "object",
+          required: ["section_type", "content", "order"],
+          properties: {
+            section_type: {
+              type: "string",
+              description: "Section type",
+            },
+            content: {
+              type: "string",
+              description: "Section content",
+            },
+            order: {
+              type: "integer",
+              description: "Display order",
+              minimum: 0,
+            },
+          },
+        },
+        CreateSectionsBulkInput: {
+          type: "object",
+          required: ["sections"],
+          properties: {
+            sections: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/CreateSectionInput",
+              },
+            },
+          },
+        },
+        UpdateSectionInput: {
+          type: "object",
+          required: ["section_id"],
+          properties: {
+            section_id: {
+              type: "integer",
+              description: "Section ID to update",
+            },
+            section_type: {
+              type: "string",
+              description: "Section type",
+            },
+            content: {
+              type: "string",
+              description: "Section content",
+            },
+            order: {
+              type: "integer",
+              description: "Display order",
+              minimum: 0,
+            },
+          },
+        },
+        UpdateSectionsBulkInput: {
+          type: "object",
+          required: ["sections"],
+          properties: {
+            sections: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/UpdateSectionInput",
+              },
+            },
+          },
+        },
+        Question: {
+          type: "object",
+          properties: {
+            question_id: {
+              type: "integer",
+            },
+            section_id: {
+              type: "integer",
+            },
+            question_type: {
+              type: "string",
+            },
+            content: {
+              type: "string",
+            },
+          },
+        },
+        CreateQuestionInput: {
+          type: "object",
+          required: ["question_type", "content"],
+          properties: {
+            question_type: {
+              type: "string",
+              description: "Question type",
+            },
+            content: {
+              type: "string",
+              description: "Question content",
+            },
+          },
+        },
+        CreateQuestionsBulkInput: {
+          type: "object",
+          required: ["questions"],
+          properties: {
+            questions: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/CreateQuestionInput",
+              },
+            },
+          },
+        },
+        UpdateQuestionInput: {
+          type: "object",
+          required: ["question_type", "content"],
+          properties: {
+            question_type: {
+              type: "string",
+              description: "Question type",
+            },
+            content: {
+              type: "string",
+              description: "Question content",
+            },
+          },
+        },
+        UpdateQuestionsBulkInput: {
+          type: "object",
+          required: ["questions"],
+          properties: {
+            questions: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/UpdateQuestionInput",
+              },
+            },
+          },
+        },
         CreateWordsBulkInput: {
           type: "object",
           required: ["words"],

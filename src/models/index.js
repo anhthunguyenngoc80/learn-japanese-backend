@@ -4,4 +4,5 @@ module.exports = {
   Word: require("./word.model"),
   Example: require("./example.model"),
   Section: require("./section.model"),
+  Question: require("./question.model"),
 };
