@@ -72,10 +72,23 @@ const deleteQuestion = async (question_id, executor = pool) => {
   return result.rows[0];
 };
 
+const deleteByCollectionId = async (collection_id, executor = pool) => {
+  const result = await executor.query(
+    `delete from questions where section_id in (
+      select s.section_id from sections s
+      join topics t on s.topic_id = t.topic_id
+      where t.collection_id = $1
+    )`,
+    [collection_id],
+  );
+  return result;
+};
+
 module.exports = {
   createQuestions,
   getQuestionsBySectionId,
   updateQuestion,
   updateQuestions,
   deleteQuestion,
+  deleteByCollectionId,
 };
