@@ -9,11 +9,11 @@ const createAnswers = async (req, res) => {
       return res.status(400).json({ message: "Answers array is required" });
     }
 
-    const answersWithQuestion = answers.map((ans) => ({
+    const answersWithLearningItem = answers.map((ans) => ({
       ...ans,
-      question_id: questionId,
+      learning_item_id: questionId,
     }));
-    const result = await answerService.createAnswers(answersWithQuestion);
+    const result = await answerService.createAnswers(answersWithLearningItem);
     res.status(201).json({ message: "Create answers successfully", data: result });
   } catch (error) {
     console.log("Create answers failed", error);
@@ -21,11 +21,11 @@ const createAnswers = async (req, res) => {
   }
 };
 
-const getAnswersByQuestionId = async (req, res) => {
+const getAnswersByLearningItemId = async (req, res) => {
   const { questionId } = req.params;
 
   try {
-    const result = await answerService.getAnswersByQuestionId(questionId);
+    const result = await answerService.getAnswersByLearningItemId(questionId);
     res.status(200).json({ message: "Get answers successfully", data: result });
   } catch (error) {
     console.log("Get answers failed", error);
@@ -82,7 +82,7 @@ const deleteAnswer = async (req, res) => {
 
 module.exports = {
   createAnswers,
-  getAnswersByQuestionId,
+  getAnswersByLearningItemId,
   updateAnswer,
   updateAnswersBulk,
   deleteAnswer,

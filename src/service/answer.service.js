@@ -4,8 +4,8 @@ const createAnswers = async (answers) => {
   return await models.Answer.createAnswers(answers);
 };
 
-const getAnswersByQuestionId = async (question_id) => {
-  return await models.Answer.getAnswersByQuestionId(question_id);
+const getAnswersByLearningItemId = async (learning_item_id) => {
+  return await models.Answer.getAnswersByLearningItemId(learning_item_id);
 };
 
 const updateAnswer = async (answer_id, content, is_correct) => {
@@ -22,7 +22,7 @@ const deleteAnswer = async (answer_id) => {
 
 module.exports = {
   createAnswers,
-  getAnswersByQuestionId,
+  getAnswersByLearningItemId,
   updateAnswer,
   updateAnswers,
   deleteAnswer,

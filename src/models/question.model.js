@@ -15,7 +15,7 @@ const getQuestionsBySectionId = async (section_id, executor = pool) => {
   const result = await executor.query(
     `select q.* from questions q
      join learning_items li on q.learning_item_id = li.learning_item_id
-     where li.section_id=$1 order by q.question_id`,
+     where li.section_id=$1 order by q.learning_item_id`,
     [section_id],
   );
   return result.rows;
@@ -60,10 +60,10 @@ const updateQuestions = async (questions, executor = pool) => {
   return results;
 };
 
-const deleteQuestion = async (question_id, executor = pool) => {
+const deleteQuestion = async (learning_item_id, executor = pool) => {
   const result = await executor.query(
-    "delete from questions where question_id=$1 returning *",
-    [question_id],
+    "delete from learning_items where learning_item_id=$1 returning *",
+    [learning_item_id],
   );
   return result.rows[0];
 };

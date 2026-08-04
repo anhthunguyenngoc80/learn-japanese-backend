@@ -232,7 +232,7 @@ const UpdateQuestionsBulkSchema = z.object({
     questions: z
       .array(
         z.object({
-          question_id: z.number().int().positive(),
+          learning_item_id: z.number().int().positive(),
           question_type: z.string().min(1).optional(),
           content: z.string().min(1).optional(),
         })

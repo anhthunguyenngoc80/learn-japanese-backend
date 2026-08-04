@@ -17,7 +17,7 @@ const {
 router.put("/:questionId", verifyToken, validate(UpdateQuestionSchema), questionController.updateQuestion);
 router.delete("/:questionId", verifyToken, validate(QuestionIdParams), questionController.deleteQuestion);
 
-router.get("/:questionId/answers", verifyToken, validate(QuestionIdParams), answerController.getAnswersByQuestionId);
+router.get("/:questionId/answers", verifyToken, validate(QuestionIdParams), answerController.getAnswersByLearningItemId);
 router.post("/:questionId/answers/bulk", verifyToken, validate(CreateAnswersBulkSchema), answerController.createAnswers);
 router.put("/:questionId/answers/bulk", verifyToken, validate(UpdateAnswersBulkSchema), answerController.updateAnswersBulk);
 

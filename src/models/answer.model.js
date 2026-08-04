@@ -8,19 +8,19 @@ const createAnswers = async (answers, executor = pool) => {
 
   for (const ans of answers) {
     params.push(`($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2})`);
-    values.push(ans.question_id, ans.content, ans.is_correct);
+    values.push(ans.learning_item_id, ans.content, ans.is_correct);
     paramIndex += 3;
   }
 
-  const query = `insert into answers (question_id, content, is_correct) values ${params.join(", ")} returning *`;
+  const query = `insert into answers (learning_item_id, content, is_correct) values ${params.join(", ")} returning *`;
   const result = await executor.query(query, values);
   return result.rows;
 };
 
-const getAnswersByQuestionId = async (question_id, executor = pool) => {
+const getAnswersByLearningItemId = async (learning_item_id, executor = pool) => {
   const result = await executor.query(
-    "select * from answers where question_id=$1 order by answer_id",
-    [question_id],
+    "select * from answers where learning_item_id=$1 order by answer_id",
+    [learning_item_id],
   );
   return result.rows;
 };
@@ -74,7 +74,7 @@ const deleteAnswer = async (answer_id, executor = pool) => {
 
 module.exports = {
   createAnswers,
-  getAnswersByQuestionId,
+  getAnswersByLearningItemId,
   updateAnswer,
   updateAnswers,
   deleteAnswer,

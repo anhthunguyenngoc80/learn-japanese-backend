@@ -299,7 +299,7 @@ const options = {
         Question: {
           type: "object",
           properties: {
-            question_id: {
+            learning_item_id: {
               type: "integer",
             },
             section_id: {
