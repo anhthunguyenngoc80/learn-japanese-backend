@@ -58,13 +58,6 @@ const deleteCollection = async (collection_id) => {
   try {
     await client.query("BEGIN");
 
-    await models.Answer.deleteByCollectionId(collection_id, client);
-    await models.Question.deleteByCollectionId(collection_id, client);
-    await models.Section.deleteByCollectionId(collection_id, client);
-    await models.Example.deleteByCollectionId(collection_id, client);
-    await models.UserProgress.deleteByCollectionId(collection_id, client);
-    await models.Word.deleteByCollectionId(collection_id, client);
-    await models.Topic.deleteByCollectionId(collection_id, client);
     const result = await models.Collection.deleteCollection(
       collection_id,
       client,

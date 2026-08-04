@@ -60,19 +60,8 @@ const updateSections = async (sections, executor = pool) => {
   return results;
 };
 
-const deleteByCollectionId = async (collection_id, executor = pool) => {
-  const result = await executor.query(
-    `delete from sections where topic_id in (
-      select topic_id from topics where collection_id = $1
-    )`,
-    [collection_id],
-  );
-  return result;
-};
-
 module.exports = {
   createSections,
   getSectionsByTopicId,
   updateSections,
-  deleteByCollectionId,
 };

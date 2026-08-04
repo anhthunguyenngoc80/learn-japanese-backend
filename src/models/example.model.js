@@ -1,14 +1,14 @@
 const pool = require("../config/db");
 
-const createExample = async (word_id, content, meaning, executor = pool) => {
+const createExample = async (learning_item_id, content, meaning, executor = pool) => {
   const result = await executor.query(
-    "insert into examples (word_id, content, meaning) values ($1, $2, $3) returning *",
-    [word_id, content, meaning],
+    "insert into examples (learning_item_id, content, meaning) values ($1, $2, $3) returning *",
+    [learning_item_id, content, meaning],
   );
   return result.rows[0];
 };
 
-const createExamples = async (word_id, examples, executor = pool) => {
+const createExamples = async (learning_item_id, examples, executor = pool) => {
   if (!examples || examples.length === 0) return [];
   const values = [];
   const params = [];
@@ -18,33 +18,21 @@ const createExamples = async (word_id, examples, executor = pool) => {
     params.push(
       `($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2})`
     );
-    values.push(word_id, ex.content, ex.meaning);
+    values.push(learning_item_id, ex.content, ex.meaning);
     paramIndex += 3;
   }
 
-  const query = `insert into examples (word_id, content, meaning) values ${params.join(
+  const query = `insert into examples (learning_item_id, content, meaning) values ${params.join(
     ", "
   )} returning *`;
   const result = await executor.query(query, values);
   return result.rows;
 };
 
-const deleteByCollectionId = async (collection_id, executor = pool) => {
+const getExamplesByWordId = async (learning_item_id, executor = pool) => {
   const result = await executor.query(
-    `delete from examples where word_id in (
-      select w.word_id from words w
-      join topics t on w.topic_id = t.topic_id
-      where t.collection_id = $1
-    )`,
-    [collection_id],
-  );
-  return result;
-};
-
-const getExamplesByWordId = async (word_id, executor = pool) => {
-  const result = await executor.query(
-    "select * from examples where word_id=$1",
-    [word_id],
+    "select * from examples where learning_item_id=$1",
+    [learning_item_id],
   );
   return result.rows;
 };
@@ -102,6 +90,5 @@ module.exports = {
   updateExample,
   updateExamples,
   deleteExample,
-  deleteByCollectionId,
   getExamplesByWordId,
 };

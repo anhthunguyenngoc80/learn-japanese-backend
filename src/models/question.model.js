@@ -2,24 +2,20 @@ const pool = require("../config/db");
 
 const createQuestions = async (questions, executor = pool) => {
   if (!questions || questions.length === 0) return [];
-  const values = [];
-  const params = [];
-  let paramIndex = 1;
-
-  for (const q of questions) {
-    params.push(`($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2})`);
-    values.push(q.section_id, q.question_type, q.content);
-    paramIndex += 3;
-  }
-
-  const query = `insert into questions (section_id, question_type, content) values ${params.join(", ")} returning *`;
-  const result = await executor.query(query, values);
-  return result.rows;
+  
+  const result = await executor.query(
+    "SELECT create_questions($1::json)",
+    [JSON.stringify(questions)]
+  );
+  
+  return result.rows[0].create_questions;
 };
 
 const getQuestionsBySectionId = async (section_id, executor = pool) => {
   const result = await executor.query(
-    "select * from questions where section_id=$1 order by question_id",
+    `select q.* from questions q
+     join learning_items li on q.learning_item_id = li.learning_item_id
+     where li.section_id=$1 order by q.question_id`,
     [section_id],
   );
   return result.rows;
@@ -72,23 +68,10 @@ const deleteQuestion = async (question_id, executor = pool) => {
   return result.rows[0];
 };
 
-const deleteByCollectionId = async (collection_id, executor = pool) => {
-  const result = await executor.query(
-    `delete from questions where section_id in (
-      select s.section_id from sections s
-      join topics t on s.topic_id = t.topic_id
-      where t.collection_id = $1
-    )`,
-    [collection_id],
-  );
-  return result;
-};
-
 module.exports = {
   createQuestions,
   getQuestionsBySectionId,
   updateQuestion,
   updateQuestions,
   deleteQuestion,
-  deleteByCollectionId,
 };

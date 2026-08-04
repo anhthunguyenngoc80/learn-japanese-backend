@@ -1,4 +1,4 @@
-const questionService = require("../service/question.service");
+const questionModel = require("../models/question.model");
 
 const createQuestions = async (req, res) => {
   const { sectionId } = req.params;
@@ -13,7 +13,7 @@ const createQuestions = async (req, res) => {
       ...q,
       section_id: sectionId,
     }));
-    const result = await questionService.createQuestions(questionsWithSection);
+    const result = await questionModel.createQuestions(questionsWithSection);
     res.status(201).json({ message: "Create questions successfully", data: result });
   } catch (error) {
     console.log("Create questions failed", error);
@@ -25,7 +25,7 @@ const getQuestionsBySectionId = async (req, res) => {
   const { sectionId } = req.params;
 
   try {
-    const result = await questionService.getQuestionsBySectionId(sectionId);
+    const result = await questionModel.getQuestionsBySectionId(sectionId);
     res.status(200).json({ message: "Get questions successfully", data: result });
   } catch (error) {
     console.log("Get questions failed", error);
@@ -38,7 +38,7 @@ const updateQuestion = async (req, res) => {
   const { question_type, content } = req.body;
 
   try {
-    const result = await questionService.updateQuestion(questionId, question_type, content);
+    const result = await questionModel.updateQuestion(questionId, question_type, content);
     if (!result) {
       return res.status(404).json({ message: "Question not found" });
     }
@@ -57,7 +57,7 @@ const updateQuestionsBulk = async (req, res) => {
       return res.status(400).json({ message: "Questions array is required" });
     }
 
-    const result = await questionService.updateQuestions(questions);
+    const result = await questionModel.updateQuestions(questions);
     res.status(200).json({ message: "Update questions successfully", data: result });
   } catch (error) {
     console.log("Update questions failed", error);
@@ -69,7 +69,7 @@ const deleteQuestion = async (req, res) => {
   const { questionId } = req.params;
 
   try {
-    const result = await questionService.deleteQuestion(questionId);
+    const result = await questionModel.deleteQuestion(questionId);
     if (!result) {
       return res.status(404).json({ message: "Question not found" });
     }

@@ -72,24 +72,10 @@ const deleteAnswer = async (answer_id, executor = pool) => {
   return result.rows[0];
 };
 
-const deleteByCollectionId = async (collection_id, executor = pool) => {
-  const result = await executor.query(
-    `delete from answers where question_id in (
-      select q.question_id from questions q
-      join sections s on q.section_id = s.section_id
-      join topics t on s.topic_id = t.topic_id
-      where t.collection_id = $1
-    )`,
-    [collection_id],
-  );
-  return result;
-};
-
 module.exports = {
   createAnswers,
   getAnswersByQuestionId,
   updateAnswer,
   updateAnswers,
   deleteAnswer,
-  deleteByCollectionId,
 };

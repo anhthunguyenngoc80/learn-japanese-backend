@@ -1,10 +1,10 @@
 const pool = require("../config/db");
 
-const createWord = async (topic_id, word, executor = pool) => {
+const createWord = async (learning_item_id, word, executor = pool) => {
   const result = await executor.query(
-    "insert into words (topic_id, text, sv_word, reading, meaning, part_of_speech) values ($1, $2, $3, $4, $5, $6) returning *",
+    "insert into words (learning_item_id, text, sv_word, reading, meaning, part_of_speech) values ($1, $2, $3, $4, $5, $6) returning *",
     [
-      topic_id,
+      learning_item_id,
       word.text,
       word.sv_word,
       word.reading,
@@ -15,7 +15,7 @@ const createWord = async (topic_id, word, executor = pool) => {
   return result.rows[0];
 };
 
-const getAllWords = async (topic_id, user_id, executor = pool) => {
+const getAllWords = async (section_id, user_id, executor = pool) => {
   const result = await executor.query(
     `select w.*,
     COALESCE(up.recognition_mastery, 0) AS recognition_mastery,
@@ -27,15 +27,16 @@ const getAllWords = async (topic_id, user_id, executor = pool) => {
     ) AS overall_mastery,
     up.next_review_at
     from words w
+    join learning_items li on w.learning_item_id = li.learning_item_id
     left join user_progress up
-    on w.word_id = up.word_id and up.user_id = $2
-    where topic_id=$1`,
-    [topic_id, user_id],
+    on w.learning_item_id = up.word_id and up.user_id = $2
+    where li.section_id=$1`,
+    [section_id, user_id],
   );
   return result.rows;
 };
 
-const getWordsByLimit = async (user_id, topic_id, limit, executor = pool) => {
+const getWordsByLimit = async (user_id, section_id, limit, executor = pool) => {
   const result = await executor.query(
     `select w.*,
     COALESCE(up.recognition_mastery, 0) AS recognition_mastery,
@@ -47,33 +48,24 @@ const getWordsByLimit = async (user_id, topic_id, limit, executor = pool) => {
     ) AS overall_mastery,
     up.next_review_at
     from words w
+    join learning_items li on w.learning_item_id = li.learning_item_id
     left join user_progress up
-    on w.word_id = up.word_id and up.user_id = $1
-    where topic_id=$2 limit $3`,
+    on w.learning_item_id = up.word_id and up.user_id = $1
+    where li.section_id=$2 limit $3`,
 
-    [user_id, topic_id, limit],
+    [user_id, section_id, limit],
   );
   return result.rows;
 };
 
-const getWordById = async (word_id, executor = pool) => {
-  const result = await executor.query("select * from words where word_id=$1", [
-    word_id,
+const getWordById = async (learning_item_id, executor = pool) => {
+  const result = await executor.query("select * from words where learning_item_id=$1", [
+    learning_item_id,
   ]);
   return result.rows;
 };
 
-const deleteByCollectionId = async (collection_id, executor = pool) => {
-  const result = await executor.query(
-    `delete from words where topic_id in (
-      select topic_id from topics where collection_id = $1
-    )`,
-    [collection_id],
-  );
-  return result;
-};
-
-const createWords = async (topic_id, words, executor = pool) => {
+const createWords = async (learning_item_id, words, executor = pool) => {
   if (!words || words.length === 0) return [];
   const values = [];
   const params = [];
@@ -84,7 +76,7 @@ const createWords = async (topic_id, words, executor = pool) => {
       `($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, $${paramIndex + 4}, $${paramIndex + 5})`
     );
     values.push(
-      topic_id,
+      learning_item_id,
       w.text,
       w.sv_word,
       w.reading,
@@ -94,7 +86,7 @@ const createWords = async (topic_id, words, executor = pool) => {
     paramIndex += 6;
   }
 
-  const query = `insert into words (topic_id, text, sv_word, reading, meaning, part_of_speech) values ${params.join(
+  const query = `insert into words (learning_item_id, text, sv_word, reading, meaning, part_of_speech) values ${params.join(
     ", "
   )} returning *`;
   const result = await executor.query(query, values);
@@ -134,8 +126,8 @@ const updateWords = async (words, executor = pool) => {
 
     if (fields.length === 0) continue;
 
-    values.push(w.word_id);
-    const query = `update words set ${fields.join(", ")} where word_id = $${paramIndex} returning *`;
+    values.push(w.learning_item_id);
+    const query = `update words set ${fields.join(", ")} where learning_item_id = $${paramIndex} returning *`;
     const result = await executor.query(query, values);
     results.push(result.rows[0]);
   }
@@ -143,9 +135,9 @@ const updateWords = async (words, executor = pool) => {
   return results;
 };
 
-const deleteWord = async (word_id, executor = pool) => {
-  const result = await executor.query("delete from words where word_id=$1 returning *", [
-    word_id,
+const deleteWord = async (learning_item_id, executor = pool) => {
+  const result = await executor.query("delete from words where learning_item_id=$1 returning *", [
+    learning_item_id,
   ]);
   return result.rows[0];
 };
@@ -157,6 +149,5 @@ module.exports = {
   getAllWords,
   getWordById,
   deleteWord,
-  deleteByCollectionId,
   getWordsByLimit,
 };
