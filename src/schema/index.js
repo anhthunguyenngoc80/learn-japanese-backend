@@ -64,7 +64,7 @@ const CreateWordSchema = z.object({
     part_of_speech: z.string().optional(),
   }),
   params: z.object({
-    topicId: z.coerce.number().int().positive(),
+    sectionId: z.coerce.number().int().positive(),
   }),
 });
 
@@ -73,6 +73,7 @@ const CreateWordsBulkSchema = z.object({
     words: z
       .array(
         z.object({
+          section_id: z.number().int().positive(),
           text: z.string().min(1),
           sv_word: z.string().min(1),
           reading: z.string().min(1),
@@ -81,9 +82,6 @@ const CreateWordsBulkSchema = z.object({
         })
       )
       .min(1),
-  }),
-  params: z.object({
-    topicId: z.coerce.number().int().positive(),
   }),
 });
 
@@ -104,9 +102,9 @@ const UpdateWordsBulkSchema = z.object({
   }),
 });
 
-const TopicIdParamsWords = z.object({
+const SectionIdParamsWords = z.object({
   params: z.object({
-    topicId: z.coerce.number().int().positive(),
+    sectionId: z.coerce.number().int().positive(),
   }),
 });
 
@@ -332,7 +330,7 @@ module.exports = {
   CreateWordSchema,
   CreateWordsBulkSchema,
   UpdateWordsBulkSchema,
-  TopicIdParamsWords,
+  SectionIdParamsWords,
   WordIdParams,
   CreateExampleSchema,
   UpdateExampleSchema,

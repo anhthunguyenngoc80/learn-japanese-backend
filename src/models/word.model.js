@@ -65,32 +65,15 @@ const getWordById = async (learning_item_id, executor = pool) => {
   return result.rows;
 };
 
-const createWords = async (learning_item_id, words, executor = pool) => {
+const createWords = async (words, executor = pool) => {
   if (!words || words.length === 0) return [];
-  const values = [];
-  const params = [];
-  let paramIndex = 1;
-
-  for (const w of words) {
-    params.push(
-      `($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, $${paramIndex + 4}, $${paramIndex + 5})`
-    );
-    values.push(
-      learning_item_id,
-      w.text,
-      w.sv_word,
-      w.reading,
-      w.meaning,
-      w.part_of_speech,
-    );
-    paramIndex += 6;
-  }
-
-  const query = `insert into words (learning_item_id, text, sv_word, reading, meaning, part_of_speech) values ${params.join(
-    ", "
-  )} returning *`;
-  const result = await executor.query(query, values);
-  return result.rows;
+  
+  const result = await executor.query(
+    "SELECT create_words($1::json)",
+    [JSON.stringify({ words })]
+  );
+  
+  return result.rows[0].create_words;
 };
 
 const updateWords = async (words, executor = pool) => {

@@ -1,11 +1,11 @@
 const wordModel = require("../models/word.model");
 
 const createWord = async (req, res) => {
-  const { topicId } = req.params;
+  const { sectionId } = req.params;
   const { text, sv_word, reading, meaning, part_of_speech } = req.body;
   try {
     const result = await wordModel.createWord(
-      topicId,
+      sectionId,
       { text, sv_word, reading, meaning, part_of_speech },
     );
     res.status(201).json({ message: "Create successfull", data: result });
@@ -16,13 +16,12 @@ const createWord = async (req, res) => {
 };
 
 const createWords = async (req, res) => {
-  const { topicId } = req.params;
   const { words } = req.body;
   try {
     if (!Array.isArray(words) || words.length === 0) {
       return res.status(400).json({ message: "Words array is required" });
     }
-    const result = await wordModel.createWords(topicId, words);
+    const result = await wordModel.createWords(words);
     res.status(201).json({ message: "Create words successfully", data: result });
   } catch (error) {
     console.log("Create words failed", error);
@@ -31,10 +30,10 @@ const createWords = async (req, res) => {
 };
 
 const getAllWords = async (req, res) => {
-  const { topicId } = req.params;
+  const { sectionId } = req.params;
   const user_id = req.user.user_id;
   try {
-    const result = await wordModel.getAllWords(topicId, user_id);
+    const result = await wordModel.getAllWords(sectionId, user_id);
     res.status(200).json({ message: "Get words successfully", data: result });
   } catch (error) {
     console.log("Query failed", error);

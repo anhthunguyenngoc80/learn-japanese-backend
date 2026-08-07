@@ -9,16 +9,16 @@ const {
   CreateWordSchema,
   CreateWordsBulkSchema,
   UpdateWordsBulkSchema,
-  TopicIdParamsWords,
+  SectionIdParamsWords,
   WordIdParams,
   CreateExampleSchema,
   CreateExamplesBulkSchema,
 } = require("../schema");
 
-router.post("/:topicId", verifyToken, validate(CreateWordSchema), wordController.createWord);
-router.post("/:topicId/bulk", verifyToken, validate(CreateWordsBulkSchema), wordController.createWords);
+router.post("/:sectionId", verifyToken, validate(CreateWordSchema), wordController.createWord);
+router.post("/bulk", verifyToken, validate(CreateWordsBulkSchema), wordController.createWords);
 router.put("/bulk", verifyToken, validate(UpdateWordsBulkSchema), wordController.updateWords);
-router.get("/:topicId", verifyToken, validate(TopicIdParamsWords), wordController.getAllWords);
+router.get("/:sectionId", verifyToken, validate(SectionIdParamsWords), wordController.getAllWords);
 router.get("/:wordId", verifyToken, validate(WordIdParams), wordController.getWordById);
 router.delete("/:wordId", verifyToken, validate(WordIdParams), wordController.deleteWord);
 router.post("/:wordId/examples", verifyToken, validate(CreateExampleSchema), exampleController.createExample);
