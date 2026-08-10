@@ -147,7 +147,7 @@ const CreateExamplesBulkSchema = z.object({
         z.object({
           learning_item_id: z.number().int().positive(),
           content: z.string().min(1),
-          meaning: z.string().min(1),
+          meaning: z.string().optional(),
         })
       )
       .min(1),
