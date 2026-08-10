@@ -38,21 +38,23 @@ const getAllWords = async (section_id, user_id, executor = pool) => {
 
 const getWordsByLimit = async (user_id, section_id, limit, executor = pool) => {
   const result = await executor.query(
-    `select w.*,
-    COALESCE(up.recognition_mastery, 0) AS recognition_mastery,
-    COALESCE(up.listening_mastery, 0)   AS listening_mastery,
-    COALESCE(up.writing_mastery, 0)      AS writing_mastery,
-    COALESCE(
-        (up.recognition_mastery + up.listening_mastery + up.writing_mastery) / 3.0,
-        0
-    ) AS overall_mastery,
-    up.next_review_at
-    from words w
-    join learning_items li on w.learning_item_id = li.learning_item_id
-    left join user_progress up
-    on w.learning_item_id = up.learning_item_id and up.user_id = $1
-    where li.section_id=$2 limit $3`,
-
+    `SELECT w.*,
+        COALESCE(up.recognition_mastery, 0) AS recognition_mastery,
+        COALESCE(up.listening_mastery, 0)   AS listening_mastery,
+        COALESCE(up.writing_mastery, 0)      AS writing_mastery,
+        COALESCE(
+            (up.recognition_mastery + up.listening_mastery + up.writing_mastery) / 3.0,
+            0
+        ) AS overall_mastery,
+        up.next_review_at
+     FROM words w
+     JOIN learning_items li 
+        ON w.learning_item_id = li.learning_item_id
+     LEFT JOIN user_progress up 
+        ON w.learning_item_id = up.learning_item_id AND up.user_id = $1
+     WHERE li.section_id = $2
+     ORDER BY w.learning_item_id
+     LIMIT $3`,
     [user_id, section_id, limit],
   );
   return result.rows;

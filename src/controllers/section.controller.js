@@ -33,4 +33,16 @@ const updateSectionsBulk = async (req, res) => {
   }
 };
 
-module.exports = { createSections, updateSectionsBulk };
+const getSectionsByTopicId = async (req, res) => {
+  const { topicId } = req.params;
+
+  try {
+    const result = await sectionService.getSectionsByTopicId(topicId);
+    res.status(200).json({ message: "Get sections successfully", data: result });
+  } catch (error) {
+    console.log("Query failed", error);
+    res.status(500).json({ message: "Query failed" });
+  }
+};
+
+module.exports = { createSections, updateSectionsBulk, getSectionsByTopicId };
