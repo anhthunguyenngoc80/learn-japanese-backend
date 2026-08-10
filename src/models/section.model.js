@@ -19,10 +19,13 @@ const createSections = async (sections, executor = pool) => {
 
 const getSectionsByTopicId = async (topic_id, executor = pool) => {
   const result = await executor.query(
-    "select * from sections where topic_id=$1 order by section_order",
+    "SELECT * FROM sections WHERE topic_id = $1 ORDER BY section_order",
     [topic_id],
   );
-  return result.rows;
+  return {
+    sections: result.rows,
+    section_count: result.rows.length,
+  };
 };
 
 const updateSections = async (sections, executor = pool) => {
