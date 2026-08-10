@@ -471,8 +471,8 @@ registry.registerPath({
         "application/json": {
           schema: z.object({
             text: z.string().min(1),
-            sv_word: z.string().min(1),
-            reading: z.string().min(1),
+            sv_word: z.string().min(1).optional(),
+            reading: z.string().min(1).optional(),
             meaning: z.string().min(1),
             part_of_speech: z.string().optional(),
           }),
@@ -528,8 +528,8 @@ registry.registerPath({
           schema: z.object({
             words: z.array(z.object({
               text: z.string().min(1),
-              sv_word: z.string().min(1),
-              reading: z.string().min(1),
+              sv_word: z.string().min(1).optional(),
+              reading: z.string().min(1).optional(),
               meaning: z.string().min(1),
               part_of_speech: z.string().optional(),
             })).min(1),

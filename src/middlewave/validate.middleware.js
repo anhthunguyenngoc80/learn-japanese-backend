@@ -1,5 +1,6 @@
 const validate = (schema) => {
   return (req, res, next) => {
+    console.log("Validating request:", req.body);
     const result = schema.safeParse({
       body: req.body,
       params: req.params,

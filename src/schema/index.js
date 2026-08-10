@@ -58,8 +58,8 @@ const TopicIdParams = z.object({
 const CreateWordSchema = z.object({
   body: z.object({
     text: z.string().min(1),
-    sv_word: z.string().min(1),
-    reading: z.string().min(1),
+    sv_word: z.string().optional(),
+    reading: z.string().optional(),
     meaning: z.string().min(1),
     part_of_speech: z.string().optional(),
   }),
@@ -75,8 +75,8 @@ const CreateWordsBulkSchema = z.object({
         z.object({
           section_id: z.number().int().positive(),
           text: z.string().min(1),
-          sv_word: z.string().min(1),
-          reading: z.string().min(1),
+          sv_word: z.string().optional(),
+          reading: z.string().optional(),
           meaning: z.string().min(1),
           part_of_speech: z.string().optional(),
         })
@@ -92,8 +92,8 @@ const UpdateWordsBulkSchema = z.object({
         z.object({
           word_id: z.number().int().positive(),
           text: z.string().min(1).optional(),
-          sv_word: z.string().min(1).optional(),
-          reading: z.string().min(1).optional(),
+          sv_word: z.string().optional(),
+          reading: z.string().optional(),
           meaning: z.string().min(1).optional(),
           part_of_speech: z.string().optional(),
         })

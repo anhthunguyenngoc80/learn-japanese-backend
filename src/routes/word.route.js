@@ -15,7 +15,6 @@ const {
   CreateExamplesBulkSchema,
 } = require("../schema");
 
-router.post("/:sectionId", verifyToken, validate(CreateWordSchema), wordController.createWord);
 router.post("/bulk", verifyToken, validate(CreateWordsBulkSchema), wordController.createWords);
 router.put("/bulk", verifyToken, validate(UpdateWordsBulkSchema), wordController.updateWords);
 router.get("/:sectionId", verifyToken, validate(SectionIdParamsWords), wordController.getAllWords);
@@ -23,5 +22,6 @@ router.get("/:wordId", verifyToken, validate(WordIdParams), wordController.getWo
 router.delete("/:wordId", verifyToken, validate(WordIdParams), wordController.deleteWord);
 router.post("/:wordId/examples", verifyToken, validate(CreateExampleSchema), exampleController.createExample);
 router.post("/:wordId/examples/bulk", verifyToken, validate(CreateExamplesBulkSchema), exampleController.createExamplesBulk);
+router.post("/:sectionId", verifyToken, validate(CreateWordSchema), wordController.createWord);
 
 module.exports = router;

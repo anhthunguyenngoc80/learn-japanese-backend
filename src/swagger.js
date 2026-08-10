@@ -180,7 +180,7 @@ const options = {
         },
         CreateWordInput: {
           type: "object",
-          required: ["text", "sv_word", "reading", "meaning"],
+          required: ["text", "meaning"],
           properties: {
             text: {
               type: "string",
