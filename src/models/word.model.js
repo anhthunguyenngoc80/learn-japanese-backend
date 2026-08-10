@@ -67,12 +67,12 @@ const getWordById = async (learning_item_id, executor = pool) => {
 
 const createWords = async (words, executor = pool) => {
   if (!words || words.length === 0) return [];
-  
+
   const result = await executor.query(
     "SELECT create_words($1::json)",
-    [JSON.stringify({ words })]
+    [JSON.stringify(words)]
   );
-  
+
   return result.rows[0].create_words;
 };
 

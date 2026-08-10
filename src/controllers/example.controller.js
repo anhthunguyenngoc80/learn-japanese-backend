@@ -42,13 +42,12 @@ const deleteExample = async (req, res) => {
 };
 
 const createExamplesBulk = async (req, res) => {
-  const { wordId } = req.params;
   const { examples } = req.body;
   try {
     if (!Array.isArray(examples) || examples.length === 0) {
       return res.status(400).json({ message: "Examples array is required" });
     }
-    const result = await exampleModel.createExamples(wordId, examples);
+    const result = await exampleModel.createExamples(examples);
     res.status(201).json({ message: "Create examples successfully", data: result });
   } catch (error) {
     console.log("Create examples failed", error);

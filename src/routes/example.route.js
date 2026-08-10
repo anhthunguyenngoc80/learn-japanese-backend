@@ -11,9 +11,9 @@ const {
   ExampleIdParams,
 } = require("../schema");
 
+router.post("/bulk", verifyToken, validate(CreateExamplesBulkSchema), exampleController.createExamplesBulk);
 router.put("/:exampleId", verifyToken, validate(UpdateExampleSchema), exampleController.updateExample);
 router.delete("/:exampleId", verifyToken, validate(ExampleIdParams), exampleController.deleteExample);
-router.post("/:wordId/bulk", verifyToken, validate(CreateExamplesBulkSchema), exampleController.createExamplesBulk);
 router.put("/bulk", verifyToken, validate(UpdateExamplesBulkSchema), exampleController.updateExamplesBulk);
 
 module.exports = router;

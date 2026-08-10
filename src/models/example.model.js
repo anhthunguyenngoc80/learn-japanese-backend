@@ -8,7 +8,7 @@ const createExample = async (learning_item_id, content, meaning, executor = pool
   return result.rows[0];
 };
 
-const createExamples = async (learning_item_id, examples, executor = pool) => {
+const createExamples = async (examples, executor = pool) => {
   if (!examples || examples.length === 0) return [];
   const values = [];
   const params = [];
@@ -18,7 +18,7 @@ const createExamples = async (learning_item_id, examples, executor = pool) => {
     params.push(
       `($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2})`
     );
-    values.push(learning_item_id, ex.content, ex.meaning);
+    values.push(ex.learning_item_id, ex.content, ex.meaning);
     paramIndex += 3;
   }
 

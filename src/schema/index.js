@@ -145,14 +145,12 @@ const CreateExamplesBulkSchema = z.object({
     examples: z
       .array(
         z.object({
+          learning_item_id: z.number().int().positive(),
           content: z.string().min(1),
           meaning: z.string().min(1),
         })
       )
       .min(1),
-  }),
-  params: z.object({
-    wordId: z.coerce.number().int().positive(),
   }),
 });
 
