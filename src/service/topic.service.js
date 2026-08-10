@@ -6,29 +6,12 @@ const getTopicById = async (user_id, topic_id, limit) => {
     return null;
   }
 
-  const words = limit
-    ? await models.Word.getWordsByLimit(user_id, topic.topic_id, limit)
-    : await models.Word.getAllWords(topic.topic_id, user_id);
-
-  const wordsWithExamples = await Promise.all(
-    words.map(async (word) => {
-      const examples = await models.Example.getExamplesByWordId(word.word_id);
-      return {
-        ...word,
-        examples,
-        };
-    }),
-  );
-
-  const progressData = await models.Topic.getTopicProgress(user_id, topic.topic_id);
-  const word_count = progressData.total_words;
-  const progress = progressData ? parseFloat(progressData.progress_percentage) : 0;
+  const sectionsData = await models.Section.getSectionsByTopicId(topic.topic_id);
 
   return {
     ...topic,
-    words: wordsWithExamples,
-    word_count,
-    progress,
+    sections: sectionsData.sections,
+    section_count: sectionsData.section_count,
   };
 };
 
