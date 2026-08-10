@@ -50,7 +50,7 @@ const getWordsByLimit = async (user_id, section_id, limit, executor = pool) => {
     from words w
     join learning_items li on w.learning_item_id = li.learning_item_id
     left join user_progress up
-    on w.learning_item_id = up.word_id and up.user_id = $1
+    on w.learning_item_id = up.learning_item_id and up.user_id = $1
     where li.section_id=$2 limit $3`,
 
     [user_id, section_id, limit],
