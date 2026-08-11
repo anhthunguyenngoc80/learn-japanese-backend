@@ -16,4 +16,43 @@ const updateSections = async (sections) => {
   return await models.Section.updateSections(sections);
 };
 
-module.exports = { createSections, getSectionsByTopicId, updateSections };
+const getSectionById = async (user_id, section_id, limit) => {
+  const section = await models.Section.getSectionById(section_id);
+  if (!section) {
+    return null;
+  }
+
+  let words = [];
+  if (section.section_type === "vocabulary") {
+
+    const allWords = await models.Word.getAllWords(section_id, user_id);
+    const word_count = allWords.length;
+    if (limit) {
+      words = await models.Word.getWordsByLimit(user_id, section_id, limit);
+    } else {
+      words = allWords;
+    }
+
+    const wordsWithExamples = await Promise.all(
+      words.map(async (word) => {
+        const examples = await models.Example.getExamplesByWordId(word.learning_item_id);
+        return {
+          ...word,
+          examples,
+        };
+      }),
+    );
+
+    return {
+      ...section,
+      words: wordsWithExamples,
+      word_count,
+    };
+  }
+
+  return {
+    ...section,
+  };
+};
+
+module.exports = { createSections, getSectionsByTopicId, updateSections, getSectionById };

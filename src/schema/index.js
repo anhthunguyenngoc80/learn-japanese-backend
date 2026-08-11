@@ -207,6 +207,15 @@ const SectionIdParams = z.object({
   }),
 });
 
+const GetSectionSchema = z.object({
+  params: z.object({
+    sectionId: z.coerce.number().int().positive(),
+  }),
+  query: z.object({
+    limit: z.coerce.number().int().positive().optional(),
+  }),
+});
+
 const CreateQuestionsBulkSchema = z.object({
   body: z.object({
     questions: z
@@ -340,6 +349,7 @@ module.exports = {
   CreateSectionsBulkSchema,
   UpdateSectionsBulkSchema,
   SectionIdParams,
+  GetSectionSchema,
   CreateQuestionsBulkSchema,
   UpdateQuestionsBulkSchema,
   QuestionIdParams,

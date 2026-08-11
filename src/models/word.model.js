@@ -29,7 +29,7 @@ const getAllWords = async (section_id, user_id, executor = pool) => {
     from words w
     join learning_items li on w.learning_item_id = li.learning_item_id
     left join user_progress up
-    on w.learning_item_id = up.word_id and up.user_id = $2
+    on w.learning_item_id = up.learning_item_id and up.user_id = $2
     where li.section_id=$1`,
     [section_id, user_id],
   );

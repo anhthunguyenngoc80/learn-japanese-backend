@@ -17,6 +17,14 @@ const createSections = async (sections, executor = pool) => {
   return result.rows;
 };
 
+const getSectionById = async (section_id, executor = pool) => {
+  const result = await executor.query(
+    "SELECT * FROM sections WHERE section_id = $1",
+    [section_id],
+  );
+  return result.rows[0];
+};
+
 const getSectionsByTopicId = async (topic_id, executor = pool) => {
   const result = await executor.query(
     "SELECT * FROM sections WHERE topic_id = $1 ORDER BY section_order",
@@ -65,6 +73,7 @@ const updateSections = async (sections, executor = pool) => {
 
 module.exports = {
   createSections,
+  getSectionById,
   getSectionsByTopicId,
   updateSections,
 };

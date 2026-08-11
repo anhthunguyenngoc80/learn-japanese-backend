@@ -45,4 +45,21 @@ const getSectionsByTopicId = async (req, res) => {
   }
 };
 
-module.exports = { createSections, updateSectionsBulk, getSectionsByTopicId };
+const getSectionById = async (req, res) => {
+  const { sectionId } = req.params;
+  const { limit } = req.query;
+  const user_id = req.user?.user_id;
+
+  try {
+    const result = await sectionService.getSectionById(user_id, sectionId, limit);
+    if (!result) {
+      return res.status(404).json({ message: "Section not found" });
+    }
+    res.status(200).json({ message: "Get section successfully", data: result });
+  } catch (error) {
+    console.log("Query failed", error);
+    res.status(500).json({ message: "Query failed" });
+  }
+};
+
+module.exports = { createSections, updateSectionsBulk, getSectionsByTopicId, getSectionById };
