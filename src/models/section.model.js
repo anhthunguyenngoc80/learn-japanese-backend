@@ -36,6 +36,14 @@ const getSectionsByTopicId = async (topic_id, executor = pool) => {
   };
 };
 
+const getSectionProgress = async (user_id, section_id, executor = pool) => {
+  const result = await executor.query(
+    "SELECT * FROM get_section_progress($1, $2)",
+    [user_id, section_id],
+  );
+  return result.rows[0];
+};
+
 const updateSections = async (sections, executor = pool) => {
   if (!sections || sections.length === 0) return [];
   const results = [];
@@ -75,5 +83,6 @@ module.exports = {
   createSections,
   getSectionById,
   getSectionsByTopicId,
+  getSectionProgress,
   updateSections,
 };

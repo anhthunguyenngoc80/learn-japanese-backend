@@ -24,13 +24,11 @@ const getSectionById = async (user_id, section_id, limit) => {
 
   let words = [];
   if (section.section_type === "vocabulary") {
-
-    const allWords = await models.Word.getAllWords(section_id, user_id);
-    const word_count = allWords.length;
+    const progress = await models.Section.getSectionProgress(user_id, section_id);
     if (limit) {
       words = await models.Word.getWordsByLimit(user_id, section_id, limit);
     } else {
-      words = allWords;
+      words = await models.Word.getAllWords(section_id, user_id);
     }
 
     const wordsWithExamples = await Promise.all(
@@ -46,12 +44,13 @@ const getSectionById = async (user_id, section_id, limit) => {
     return {
       ...section,
       words: wordsWithExamples,
-      word_count,
+      word_count: progress?.total_words ?? 0,
+      progress_percentage: progress.progress_percentage,
     };
   }
 
   return {
-    ...section,
+    ...section
   };
 };
 
