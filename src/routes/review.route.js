@@ -10,7 +10,7 @@ router.get(
   "/flashcard/:sectionId",
   verifyToken,
   validate(ReviewSectionParams),
-  reviewController.getFlashcardWordsByTopicId,
+  reviewController.getFlashcardWordsBySectionId,
 );
 
 router.get(

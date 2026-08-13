@@ -21,7 +21,7 @@ const getWordsForReview = async (user_id, topic_id, limit = DEFAULT_LIMIT) => {
   };
 };
 
-const getFlashcardWordsByTopicId = async (
+const getFlashcardWordsBySectionId = async (
   user_id,
   section_id,
   limit = DEFAULT_LIMIT,
@@ -45,8 +45,7 @@ const getFlashcardWordsByTopicId = async (
   }
 
   return {
-    section_id: section.section_id,
-    name: section.content,
+    ...section,
     words,
   };
 };
@@ -69,7 +68,7 @@ const updateAfterAttempt = async (
 };
 
 module.exports = {
-  getFlashcardWordsByTopicId,
+  getFlashcardWordsBySectionId,
   getWordsForReview,
   updateAfterAttempt,
 };

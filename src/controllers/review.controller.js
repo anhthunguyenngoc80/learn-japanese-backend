@@ -16,13 +16,13 @@ const getWordsForReview = async (req, res) => {
   }
 };
 
-const getFlashcardWordsByTopicId = async (req, res) => {
+const getFlashcardWordsBySectionId = async (req, res) => {
   const user_id = req.user.user_id;
   const { sectionId } = req.params;
   const limit = parseInt(req.query.limit) || 10;
 
   try {
-    const result = await reviewService.getFlashcardWordsByTopicId(
+    const result = await reviewService.getFlashcardWordsBySectionId(
       user_id,
       sectionId,
       limit,
@@ -75,7 +75,7 @@ const updateAfterAttempt = async (req, res) => {
 };
 
 module.exports = {
-  getFlashcardWordsByTopicId,
+  getFlashcardWordsBySectionId,
   getWordsForReview,
   updateAfterAttempt,
 };
