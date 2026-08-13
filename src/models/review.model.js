@@ -1,33 +1,35 @@
 const pool = require("../config/db");
 
-const getFlashcardWord = async (user_id, topic_id, limit, executor = pool) => {
+const getFlashcardWord = async (user_id, section_id, limit, executor = pool) => {
   const result = await executor.query(
     `SELECT w.*
       FROM words w
-      WHERE w.topic_id = $2
+      JOIN learning_items li ON w.learning_item_id = li.learning_item_id
+      WHERE li.section_id = $2
       AND NOT EXISTS (
           SELECT 1 FROM user_progress up
-          WHERE up.word_id = w.word_id AND up.user_id = $1
+          WHERE up.learning_item_id = w.learning_item_id AND up.user_id = $1
       )
       LIMIT $3;`,
-    [user_id, topic_id, limit],
+    [user_id, section_id, limit],
   );
   return result.rows;
 };
 
-const getWordsForReview = async (user_id, topic_id, limit, executor = pool) => {
+const getWordsForReview = async (user_id, section_id, limit, executor = pool) => {
   const result = await executor.query(
     `SELECT
-        up.word_id,
+        up.learning_item_id,
         w.*,
         up.next_review_at
      FROM user_progress up
-     JOIN words w ON up.word_id = w.word_id
+     JOIN words w ON up.learning_item_id = w.learning_item_id
+     JOIN learning_items li ON w.learning_item_id = li.learning_item_id
      WHERE up.user_id = $1
-       AND w.topic_id = $2
+       AND li.section_id = $2
      ORDER BY up.next_review_at ASC
      LIMIT $3`,
-    [user_id, topic_id, limit],
+    [user_id, section_id, limit],
   );
   return result.rows;
 };

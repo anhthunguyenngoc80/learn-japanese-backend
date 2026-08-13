@@ -318,6 +318,15 @@ const ReviewTopicParams = z.object({
   }),
 });
 
+const ReviewSectionParams = z.object({
+  params: z.object({
+    sectionId: z.coerce.number().int().positive(),
+  }),
+  query: z.object({
+    limit: z.coerce.number().int().positive().optional().default(10),
+  }),
+});
+
 const UpdateMasterySchema = z.object({
   body: z.object({
     word_id: z.number().int().positive(),
@@ -345,6 +354,7 @@ module.exports = {
   CreateExamplesBulkSchema,
   UpdateExamplesBulkSchema,
   ReviewTopicParams,
+  ReviewSectionParams,
   UpdateMasterySchema,
   CreateSectionsBulkSchema,
   UpdateSectionsBulkSchema,

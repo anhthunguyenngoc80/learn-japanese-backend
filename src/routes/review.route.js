@@ -4,12 +4,12 @@ const router = express.Router();
 const reviewController = require("../controllers/review.controller");
 const { verifyToken } = require("../middlewave/auth.middleware");
 const { validate } = require("../middlewave/validate.middleware");
-const { ReviewTopicParams, UpdateMasterySchema } = require("../schema");
+const { ReviewTopicParams, ReviewSectionParams, UpdateMasterySchema } = require("../schema");
 
 router.get(
-  "/flashcard/:topicId",
+  "/flashcard/:sectionId",
   verifyToken,
-  validate(ReviewTopicParams),
+  validate(ReviewSectionParams),
   reviewController.getFlashcardWordsByTopicId,
 );
 
