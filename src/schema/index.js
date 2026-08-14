@@ -309,15 +309,6 @@ const UpdateQuestionSchema = z.object({
 });
 
 // ==================== Review Schemas ====================
-const ReviewTopicParams = z.object({
-  params: z.object({
-    topicId: z.coerce.number().int().positive(),
-  }),
-  query: z.object({
-    limit: z.coerce.number().int().positive().optional().default(10),
-  }),
-});
-
 const ReviewSectionParams = z.object({
   params: z.object({
     sectionId: z.coerce.number().int().positive(),

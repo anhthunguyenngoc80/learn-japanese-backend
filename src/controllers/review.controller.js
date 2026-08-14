@@ -2,11 +2,11 @@ const reviewService = require("../service/review.service");
 
 const getWordsForReview = async (req, res) => {
   const user_id = req.user.user_id;
-  const { topicId } = req.params;
+  const { sectionId } = req.params;
   const limit = parseInt(req.query.limit) || 10;
 
   try {
-    const result = await reviewService.getWordsForReview(user_id, topicId, limit);
+    const result = await reviewService.getWordsForReview(user_id, sectionId, limit);
     res
       .status(200)
       .json({ message: "Get words due for review successfully", data: result });

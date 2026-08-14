@@ -4,19 +4,18 @@ const sectionModel = require("../models/section.model");
 
 const DEFAULT_LIMIT = 10;
 
-const getWordsForReview = async (user_id, topic_id, limit = DEFAULT_LIMIT) => {
-  // Get topic info
-  const topic = await topicModel.getTopicById(topic_id);
+const getWordsForReview = async (user_id, section_id, limit = DEFAULT_LIMIT) => {
+  // Get section info
+  const section = await sectionModel.getSectionById(section_id);
 
   const words = await userProgressModel.getWordsForReview(
     user_id,
-    topic_id,
+    section_id,
     limit,
   );
 
   return {
-    topic_id: topic.topic_id,
-    name: topic.name,
+    ...section,
     words,
   };
 };
